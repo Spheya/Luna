@@ -15,7 +15,7 @@ add_custom_target(update_mappings
 set_target_properties(update_mappings PROPERTIES FOLDER "GLFW3")
 
 if (_GLFW_COCOA)
-    set(glfw_HEADERS ${cofmmon_HEADERS} cocoa_platform.h cocoa_joystick.h
+    set(glfw_HEADERS ${common_HEADERS} cocoa_platform.h cocoa_joystick.h
                      posix_thread.h nsgl_context.h egl_context.h osmesa_context.h)
     set(glfw_SOURCES ${common_SOURCES} cocoa_init.m cocoa_joystick.m
                      cocoa_monitor.m cocoa_window.m cocoa_time.c posix_thread.c
