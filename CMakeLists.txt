@@ -10,7 +10,7 @@ project ("owo")
 
 add_subdirectory ("external")
 
-add_library (owo "src/owo/Window.cpp")
+add_library (owo "src/owo/Window.cpp" "src/owo/Camera.cpp" "src/owo/Mesh.cpp" "src/owo/Renderer.cpp")
 set_property(TARGET owo PROPERTY CXX_STANDARD 20)
 
 target_include_directories(owo PUBLIC "src")

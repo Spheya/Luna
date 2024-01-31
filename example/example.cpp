@@ -1,39 +1,34 @@
-#include <glad/glad.h>
-#include <glfw/glfw3.h>
 #include <iostream>
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-    glViewport(0, 0, width, height);
-}
+#include <owo.hpp>
+#include <owo/Window.hpp>
 
 int main() {
-    glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	owo::Window window("owo example");
+	if (!window.isValid()) {
+		std::cout << "error setting up window!" << std::endl;
+		return -1;
+	}
 
-    GLFWwindow* window = glfwCreateWindow(800, 600, "OwO", NULL, NULL);
-    if (window == NULL) {
-        std::cout << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        return -1;
-    }
-    glfwMakeContextCurrent(window);
+	owo::Camera camera(&window);
+	owo::Renderer renderer;
 
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        std::cout << "Failed to initialize GLAD" << std::endl;
-        return -1;\
+	owo::Mesh quad {
+		owo::Vertex(glm::vec3(-0.5f, 0.5f, 0.0f)),
+		owo::Vertex(glm::vec3(-0.5f, -0.5f, 0.0f)),
+		owo::Vertex(glm::vec3(0.5f, -0.5f, 0.0f)),
 
-    }
+		owo::Vertex(glm::vec3(0.5f, -0.5f, 0.0f)),
+		owo::Vertex(glm::vec3(0.5f, 0.5f, 0.0f)),
+		owo::Vertex(glm::vec3(-0.5f, 0.5f, 0.0f)),
+	};
 
-    glViewport(0, 0, 800, 600);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	while (!window.isCloseRequested()) {
+		window.clear();
+		renderer.beginFrame();
 
-    while (!glfwWindowShouldClose(window)) {
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-    }
+		renderer.push(&quad);
 
-    glfwTerminate();
-    return 0;
+		renderer.render(camera);
+		window.update();
+	}
 }
