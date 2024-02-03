@@ -4,7 +4,7 @@
 
 #include <initializer_list>
 
-namespace owo {
+namespace luna {
 
 	class Mesh {
 	public:

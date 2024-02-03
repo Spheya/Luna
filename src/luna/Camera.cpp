@@ -1,6 +1,6 @@
 #include "Camera.hpp"
 
-namespace owo {
+namespace luna {
 	Camera::Camera(RenderTarget* target, Transform transform) :
 		m_target(target),
 		m_transform(transform)

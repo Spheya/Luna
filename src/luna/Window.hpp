@@ -8,7 +8,7 @@
 #include "Math.hpp"
 #include "RenderTarget.hpp"
 
-namespace owo {
+namespace luna {
 
 	class GlfwContext {
 		friend class Window;

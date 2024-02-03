@@ -4,7 +4,7 @@
 #include <GLFW/glfw3.h>
 #include <cassert>
 
-namespace owo {
+namespace luna {
 	
 	std::weak_ptr<GlfwContext> GlfwContext::s_instance;
 

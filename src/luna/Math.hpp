@@ -8,7 +8,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-namespace owo {
+namespace luna {
 
 	constexpr float Pi          = 3.14159265359f;
 	constexpr float Tau         = 6.28318530718f;

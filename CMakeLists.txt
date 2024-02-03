@@ -6,19 +6,19 @@ if (POLICY CMP0141)
   set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
 endif()
 
-project ("owo")
+project ("luna")
 
 add_subdirectory ("external")
 
-add_library (owo "src/owo/Window.cpp" "src/owo/Camera.cpp" "src/owo/Mesh.cpp" "src/owo/Renderer.cpp")
-set_property(TARGET owo PROPERTY CXX_STANDARD 20)
+add_library (luna "src/luna/Window.cpp" "src/luna/Camera.cpp" "src/luna/Mesh.cpp" "src/luna/Renderer.cpp")
+set_property(TARGET luna PROPERTY CXX_STANDARD 20)
 
-target_include_directories(owo PUBLIC "src")
-target_include_directories(owo PUBLIC "external")
+target_include_directories(luna PUBLIC "src")
+target_include_directories(luna PUBLIC "external")
 
-target_link_libraries(owo PUBLIC glm glfw glad)
+target_link_libraries(luna PUBLIC glm glfw glad)
 
-install(TARGETS owo DESTINATION lib)
+install(TARGETS luna DESTINATION lib)
 install(FILES LICENSE DESTINATION .)
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/ DESTINATION include FILES_MATCHING PATTERN "*.hpp")
 

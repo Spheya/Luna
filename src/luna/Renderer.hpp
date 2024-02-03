@@ -5,7 +5,7 @@
 #include "Camera.hpp"
 #include "Mesh.hpp"
 
-namespace owo {
+namespace luna {
 
 	class Renderer {
 	public:

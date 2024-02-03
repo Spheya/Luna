@@ -2,7 +2,7 @@
 
 #include <glad/glad.h>
 
-namespace owo {
+namespace luna {
 	Mesh::Mesh() :
 		m_vao(0),
 		m_verticesVbo(0),

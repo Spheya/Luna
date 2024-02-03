@@ -3,7 +3,7 @@
 #include "Math.hpp"
 #include "RenderTarget.hpp"
 
-namespace owo {
+namespace luna {
 
 	class Camera {
 	public:

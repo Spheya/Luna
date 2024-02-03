@@ -2,7 +2,7 @@
 
 #include <glad/glad.h>
 
-namespace owo {
+namespace luna {
 
 	void Renderer::beginFrame() {
 		m_commandBuffer.clear();

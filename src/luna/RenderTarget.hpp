@@ -1,6 +1,6 @@
 #pragma once
 
-namespace owo {
+namespace luna {
 
 	class RenderTarget {
 	public:
