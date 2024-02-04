@@ -9,7 +9,7 @@ namespace luna {
 	}
 
 	void Renderer::endFrame() {
-		// TODO : possibly do some optimization, like grouping draw command together
+		// TODO : possibly do some optimization, like grouping draw commands together
 	}
 
 	void Renderer::push(const Mesh* mesh) {
@@ -23,7 +23,7 @@ namespace luna {
 	}
 
 	void Renderer::draw(const Mesh* mesh) const {
-		glBindVertexArray(mesh->handle());
+		mesh->bind();
 		glDrawElements(GL_TRIANGLES, GLsizei(mesh->vertexCount()), GL_UNSIGNED_INT, nullptr);
 	}
 

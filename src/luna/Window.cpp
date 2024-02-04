@@ -2,18 +2,23 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <cassert>
+#include "Logger.hpp"
 
 namespace luna {
 	
 	std::weak_ptr<GlfwContext> GlfwContext::s_instance;
 
 	GlfwContext::GlfwContext() {
-		glfwInit();
+		if (!glfwInit()) {
+			log("An error occured while initializing GLFW", MessageSeverity::Error);
+		} else {
+			log("Initialized GLFW", MessageSeverity::Info);
+		}
 	}
 
 	GlfwContext::~GlfwContext() {
 		glfwTerminate();
+		log("Closed GLFW", MessageSeverity::Info);
 	}
 
 	std::shared_ptr<GlfwContext> GlfwContext::getReference() {
@@ -29,19 +34,23 @@ namespace luna {
 	Window::Window(const char* title, glm::ivec2 size) :
 		m_isValid(false)
 	{
-		assert(size.x > 0);
-		assert(size.y > 0);
-
 		m_contextReference = GlfwContext::getReference();
 
 		m_windowHandle = glfwCreateWindow(size.x, size.y, title, nullptr, nullptr);
+		if (!m_windowHandle) {
+			log("An error occured while creating a window", MessageSeverity::Error);
+			return;
+		}
+
 		makeCurrentContext();
 
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+			log("An error occured while loading OpenGL", MessageSeverity::Error);
 			return;
 		}
 
 		m_isValid = true;
+		log("Created window", MessageSeverity::Info);
 	}
 
 	Window::Window(const char* title, int width, int height, bool fullscreen) :
@@ -50,6 +59,7 @@ namespace luna {
 
 	Window::~Window() {
 		glfwDestroyWindow(m_windowHandle);
+		log("Closed window", MessageSeverity::Info);
 	}
 
 	bool Window::isValid() const {

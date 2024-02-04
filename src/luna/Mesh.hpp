@@ -21,7 +21,7 @@ namespace luna {
 		void setVertices(const Vertex* vertices, size_t size);
 		void setIndices(const unsigned int* indices, size_t size);
 
-		unsigned int handle() const;
+		void bind() const;
 		size_t vertexCount() const;
 
 	private:

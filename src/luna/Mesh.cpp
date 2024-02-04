@@ -32,16 +32,20 @@ namespace luna {
 		setIndices(indices, indexCount);
 	}
 
-	Mesh::Mesh(Mesh&& other) noexcept {
-		m_vao = other.m_vao;
-		m_vbos[Vertices] = other.m_vbos[Vertices];
-		m_vbos[Indices] = other.m_vbos[Indices];
-		m_vertexCount = other.m_vertexCount;
-
+	Mesh::Mesh(Mesh&& other) noexcept :
+		m_vao(other.m_vao),
+		m_vbos{ other.m_vbos[0], other.m_vbos[1]},
+		m_vertexCount(other.m_vertexCount)
+	{
 		other.m_vao = 0;
 	}
 
 	Mesh& Mesh::operator=(Mesh&& other) noexcept {
+		if (m_vao != 0) {
+			glDeleteVertexArrays(1, &m_vao);
+			glDeleteBuffers(2, m_vbos);
+		}
+
 		m_vao = other.m_vao;
 		m_vbos[Vertices] = other.m_vbos[Vertices];
 		m_vbos[Indices] = other.m_vbos[Indices];
@@ -91,8 +95,12 @@ namespace luna {
 		m_vertexCount = size;
 	}
 
-	unsigned Mesh::handle() const {
-		return m_vao;
+	void Mesh::bind() const {
+		static const Mesh* boundVao = nullptr;
+		if (boundVao != this) {
+			glBindVertexArray(m_vao);
+			boundVao = this;
+		}
 	}
 
 	size_t Mesh::vertexCount() const {

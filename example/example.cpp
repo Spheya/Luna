@@ -3,12 +3,11 @@
 #include <luna/Window.hpp>
 
 int main() {
-	luna::Window window("luna example");
-	if (!window.isValid()) {
-		std::cout << "error setting up window!" << std::endl;
-		return -1;
-	}
+	luna::setMessageCallback([](const char* message, const char* prefix, luna::MessageSeverity severity) {
+		std::cout << '<' << prefix << "> " << message << std::endl;
+	});
 
+	luna::Window window("Luna example");
 	luna::Camera camera(&window);
 	luna::Renderer renderer;
 
