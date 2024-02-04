@@ -10,7 +10,7 @@ project ("luna")
 
 add_subdirectory ("external")
 
-add_library (luna "src/luna/Window.cpp" "src/luna/Camera.cpp" "src/luna/Mesh.cpp" "src/luna/Renderer.cpp")
+add_library (luna "src/luna/Window.cpp" "src/luna/Camera.cpp" "src/luna/Mesh.cpp" "src/luna/Renderer.cpp" "src/luna/Color.cpp")
 set_property(TARGET luna PROPERTY CXX_STANDARD 20)
 
 target_include_directories(luna PUBLIC "src")

@@ -70,8 +70,8 @@ namespace luna {
 		return glfwWindowShouldClose(m_windowHandle);
 	}
 
-	void Window::clear() {
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	void Window::clear(Color color) {
+		glClearColor(color.r, color.g, color.b, color.a);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	}
 }

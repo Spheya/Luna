@@ -23,7 +23,7 @@ int main() {
 	};
 
 	while (!window.isCloseRequested()) {
-		window.clear();
+		window.clear(luna::Color::blue);
 		renderer.beginFrame();
 
 		renderer.push(&quad);

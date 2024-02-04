@@ -37,7 +37,7 @@ namespace luna {
 		bool isCloseRequested() const;
 		void close();
 
-		virtual void clear();
+		void clear(Color color) override;
 
 	private:
 		bool m_isValid;
