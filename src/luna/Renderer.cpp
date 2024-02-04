@@ -24,7 +24,7 @@ namespace luna {
 
 	void Renderer::draw(const Mesh* mesh) const {
 		glBindVertexArray(mesh->handle());
-		glDrawArrays(GL_TRIANGLES, 0, GLsizei(mesh->vertexCount()));
+		glDrawElements(GL_TRIANGLES, GLsizei(mesh->vertexCount()), GL_UNSIGNED_INT, nullptr);
 	}
 
 }

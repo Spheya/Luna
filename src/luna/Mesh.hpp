@@ -10,23 +10,32 @@ namespace luna {
 	public:
 		Mesh();
 		Mesh(std::initializer_list<Vertex> vertices);
-		Mesh(const Vertex* vertices, size_t vertexCount);
+		Mesh(const Vertex* vertices, size_t size);
+		Mesh(const Vertex* vertices, size_t vertexCount, const unsigned int* indices, size_t indexCount);
 		Mesh(Mesh&) = delete;
 		Mesh& operator=(Mesh&) = delete;
 		Mesh(Mesh&& other) noexcept;
 		Mesh& operator=(Mesh&& other) noexcept;
 		~Mesh();
 
-		void setVertices(const Vertex* vertices, size_t vertexCount);
+		void setVertices(const Vertex* vertices, size_t size);
+		void setIndices(const unsigned int* indices, size_t size);
 
 		unsigned int handle() const;
 		size_t vertexCount() const;
 
 	private:
+		enum BufferIndex {
+			Vertices = 0,
+			Indices = 1
+		};
+
 		unsigned int m_vao;
-		unsigned int m_verticesVbo;
+		unsigned int m_vbos[2];
 
 		size_t m_vertexCount;
+
+		void init();
 	};
 
 }
