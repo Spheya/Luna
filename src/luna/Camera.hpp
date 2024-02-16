@@ -13,6 +13,8 @@ namespace luna {
 
 		void setTarget(RenderTarget* target);
 		RenderTarget* getTarget() const;
+		void setBackgroundColor(Color color);
+		Color getBackgroundColor() const;
 		void setTransform(const Transform& transform);
 		const Transform& getTransform() const;
 		Transform& getTransform();
@@ -35,6 +37,7 @@ namespace luna {
 		RenderTarget* m_target;
 		Transform m_transform;
 		ProjectionType m_projectionType = ProjectionType::Orthographic;
+		Color m_backgroundColor = Color::Black;
 
 		float m_near = 0.03f;
 		float m_far = 1000.0f;

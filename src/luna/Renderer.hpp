@@ -4,28 +4,30 @@
 
 #include "Camera.hpp"
 #include "Mesh.hpp"
+#include "Material.hpp"
 
 namespace luna {
 
 	class Renderer {
 	public:
-		struct DrawCommand {
-			const Mesh* mesh;
-		};
-
 		virtual ~Renderer() = default;
 
-		void push(const Mesh* mesh);
+		void push(const Mesh* mesh, const glm::mat4 matrix, const Material* material);
 
 		virtual void beginFrame();
 		virtual void endFrame();
 		virtual void render(const Camera& camera) const;
 
 	protected:
-		void draw(const Mesh* mesh) const;
+		struct RenderObject {
+			const Mesh* mesh;
+			glm::mat4 matrix;
+			const Material* material;
+		};
 
-	private:
-		std::vector<DrawCommand> m_commandBuffer;
+		void draw(const RenderObject& mesh) const;
+
+		std::vector<RenderObject> m_renderObjects;
 
 	};
 

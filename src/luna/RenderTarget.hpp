@@ -8,7 +8,8 @@ namespace luna {
 	public:
 		virtual ~RenderTarget() = default;
 
-		virtual void clear(Color color) = 0;
+		static void clear(Color color);
+		virtual void makeActiveTarget() = 0;
 	};
 
 }
