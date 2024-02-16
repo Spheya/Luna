@@ -25,7 +25,7 @@ namespace luna {
 			const Material* material;
 		};
 
-		void draw(const RenderObject& mesh) const;
+		void draw(const Mesh* mesh) const;
 
 		std::vector<RenderObject> m_renderObjects;
 

@@ -20,15 +20,15 @@ namespace luna {
 		camera.getTarget()->makeActiveTarget();
 		RenderTarget::clear(camera.getBackgroundColor());
 
-		for (const auto& command : m_renderObjects) {
-			draw(command);
+		for (const auto& object : m_renderObjects) {
+			object.material->bind();
+			object.mesh->bind();
+			draw(object.mesh);
 		}
 	}
 
-	void Renderer::draw(const RenderObject& object) const {
-		object.mesh->bind();
-		object.material->bind();
-		glDrawElements(GL_TRIANGLES, GLsizei(object.mesh->vertexCount()), GL_UNSIGNED_INT, nullptr);
+	void Renderer::draw(const Mesh* mesh) const {
+		glDrawElements(GL_TRIANGLES, GLsizei(mesh->vertexCount()), GL_UNSIGNED_INT, nullptr);
 	}
 
 }

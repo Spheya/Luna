@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Math.hpp"
+#include "Color.hpp"
 
 namespace luna {
 
@@ -25,6 +26,7 @@ namespace luna {
 		void uniform(int id, glm::vec4 value);
 		void uniform(int id, glm::mat3 value);
 		void uniform(int id, glm::mat4 value);
+		void uniform(int id, Color value);
 
 		void bind() const;
 

@@ -37,7 +37,7 @@ namespace luna {
 			return;
 		}
 		log("Loaded OpenGL", MessageSeverity::Info);
-		log("Luna context created!", MessageSeverity::Info);
+		log("Luna context created", MessageSeverity::Info);
 
 		m_valid = true;
 	}

@@ -13,16 +13,14 @@ int main() {
 	luna::Camera camera(&window);
 	luna::Renderer renderer;
 
-	camera.setBackgroundColor(luna::Color::Red);
-
 	luna::Mesh quad{
-		luna::Vertex(glm::vec3(-0.5f, 0.5f, 0.0f)),
-		luna::Vertex(glm::vec3(-0.5f, -0.5f, 0.0f)),
-		luna::Vertex(glm::vec3(0.5f, -0.5f, 0.0f)),
+		luna::Vertex(glm::vec3(-0.5f, +0.5f, 0.0f), glm::vec2(0.0f, 0.0f)),
+		luna::Vertex(glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec2(0.0f, 1.0f)),
+		luna::Vertex(glm::vec3(+0.5f, -0.5f, 0.0f), glm::vec2(1.0f, 1.0f)),
 
-		luna::Vertex(glm::vec3(0.5f, -0.5f, 0.0f)),
-		luna::Vertex(glm::vec3(0.5f, 0.5f, 0.0f)),
-		luna::Vertex(glm::vec3(-0.5f, 0.5f, 0.0f)),
+		luna::Vertex(glm::vec3(+0.5f, -0.5f, 0.0f), glm::vec2(1.0f, 1.0f)),
+		luna::Vertex(glm::vec3(+0.5f, +0.5f, 0.0f), glm::vec2(1.0f, 0.0f)),
+		luna::Vertex(glm::vec3(-0.5f, +0.5f, 0.0f), glm::vec2(0.0f, 0.0f)),
 	};
 
 	luna::Shader shader(
@@ -35,9 +33,11 @@ int main() {
 		\n\
 		out vec4 vertexColor;\n\
 		\n\
+		uniform vec4 MainColor;\n\
+		\n\
 		void main() {\n\
 			gl_Position = vec4(position, 1.0);\n\
-			vertexColor = vec4(1.0, 1.0, 1.0, 1.0);\n\
+			vertexColor = MainColor;\n\
 		}\n",
 		
 		"\
@@ -53,7 +53,8 @@ int main() {
 	);
 
 	luna::Material material(&shader);
-	
+	material.setColor(luna::Color::Blue);
+
 	while (!context.isCloseRequested() && !window.isCloseRequested()) {
 		renderer.beginFrame();
 

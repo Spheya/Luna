@@ -15,7 +15,50 @@ namespace luna {
 	}
 
 	void Material::bind() const {
-		m_shader->getProgram().bind();
+		ShaderProgram* program = &m_shader->getProgram();
+		program->bind();
+
+		for (const auto& param : m_floatParams) program->uniform(program->uniformId(param.name.c_str()), param.value);
+		for (const auto& param : m_vec2Params)  program->uniform(program->uniformId(param.name.c_str()), param.value);
+		for (const auto& param : m_vec3Params)  program->uniform(program->uniformId(param.name.c_str()), param.value);
+		for (const auto& param : m_vec4Params)  program->uniform(program->uniformId(param.name.c_str()), param.value);
+		for (const auto& param : m_mat3Params)  program->uniform(program->uniformId(param.name.c_str()), param.value);
+		for (const auto& param : m_mat4Params)  program->uniform(program->uniformId(param.name.c_str()), param.value);
 	}
 
+	void Material::setColor(Color color) {
+		setValue("MainColor", color);
+	}
+
+	void Material::setValue(const char* name, float value) {
+		setParam(m_floatParams, name, value);
+	}
+
+	void Material::setValue(const char* name, glm::vec1 value) {
+		setParam(m_floatParams, name, value.r);
+	}
+
+	void Material::setValue(const char* name, glm::vec2 value) {
+		setParam(m_vec2Params, name, value);
+	}
+
+	void Material::setValue(const char* name, glm::vec3 value) {
+		setParam(m_vec3Params, name, value);
+	}
+
+	void Material::setValue(const char* name, glm::vec4 value) {
+		setParam(m_vec4Params, name, value);
+	}
+
+	void Material::setValue(const char* name, glm::mat3 value) {
+		setParam(m_mat3Params, name, value);
+	}
+
+	void Material::setValue(const char* name, glm::mat4 value) {
+		setParam(m_mat4Params, name, value);
+	}
+
+	void Material::setValue(const char* name, Color value) {
+		setParam(m_vec4Params, name, value.asVec4());
+	}
 }

@@ -118,27 +118,32 @@ namespace luna {
 
 	void ShaderProgram::uniform(int id, glm::vec2 value) {
 		bind();
-		glUniform2fv(id, 2, &value.x);
+		glUniform2fv(id, 1, &value.x);
 	}
 
 	void ShaderProgram::uniform(int id, glm::vec3 value) {
 		bind();
-		glUniform3fv(id, 3, &value.x);
+		glUniform3fv(id, 1, &value.x);
 	}
 
 	void ShaderProgram::uniform(int id, glm::vec4 value) {
 		bind();
-		glUniform4fv(id, 4, &value.x);
+		glUniform4fv(id, 1, &value.x);
 	}
 
 	void ShaderProgram::uniform(int id, glm::mat3 value) {
 		bind();
-		glUniformMatrix3fv(id, 9, false, &value[0][0]);
+		glUniformMatrix3fv(id, 1, false, &value[0][0]);
 	}
 
 	void ShaderProgram::uniform(int id, glm::mat4 value) {
 		bind();
-		glUniformMatrix4fv(id, 16, false, &value[0][0]);
+		glUniformMatrix4fv(id, 1, false, &value[0][0]);
+	}
+
+	void ShaderProgram::uniform(int id, Color value) {
+		bind();
+		glUniform4fv(id, 1, &value.r);
 	}
 
 	void ShaderProgram::bind() const {
