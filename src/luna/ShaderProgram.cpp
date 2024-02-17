@@ -63,8 +63,7 @@ namespace luna {
 	}
 
 	void ShaderProgram::load(const char* vertexSource, const char* fragmentSource) {
-		if (m_program != 0)
-			glDeleteProgram(m_program);
+		ShaderProgram::~ShaderProgram();
 
 		GLuint vertex = loadShader(vertexSource, GL_VERTEX_SHADER);
 		GLuint fragment = loadShader(fragmentSource, GL_FRAGMENT_SHADER);

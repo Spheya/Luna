@@ -12,10 +12,18 @@ namespace luna {
 		setTextureData(data);
 	}
 
+	Texture::Texture(std::uint8_t* data, glm::ivec2 size) :
+		Texture(data, size.x, size.y)
+	{}
+
 	Texture::Texture(Color* data, int width, int height) :
 		m_dimensions(width, height)
 	{
 		setTextureData(data);
+	}
+
+	Texture::Texture(Color* data, glm::ivec2 size) :
+		Texture(data, size.x, size.y) {
 	}
 
 	Texture::Texture(Color color) :
@@ -25,6 +33,10 @@ namespace luna {
 	Texture::Texture(int width, int height) {
 		setSize(width, height);
 	}
+
+	Texture::Texture(glm::ivec2 size) : 
+		Texture(size.x, size.y)
+	{}
 
 	Texture::Texture(Texture&& other) noexcept :
 		m_texture(other.m_texture),
@@ -88,6 +100,10 @@ namespace luna {
 		m_dimensions = glm::ivec2(width, height);
 	}
 
+	void Texture::setTextureData(std::uint8_t* data, glm::ivec2 size) {
+		setTextureData(data, size.x, size.y);
+	}
+
 	void Texture::setTextureData(Color data) {
 		setTextureData(&data, 1, 1);
 	}
@@ -117,6 +133,10 @@ namespace luna {
 		setTextureData(buffer, width, height);
 
 		delete[] buffer;
+	}
+
+	void Texture::setTextureData(Color* data, glm::ivec2 size) {
+		setTextureData(data, size.x, size.y);
 	}
 
 	void Texture::setFilter(TextureFilter filter) {

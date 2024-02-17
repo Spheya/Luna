@@ -20,6 +20,10 @@ namespace luna {
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_rbo);
 	}
 
+	RenderTexture::RenderTexture(glm::ivec2 size) :
+		RenderTexture(size.x, size.y)
+	{}
+
 	RenderTexture::RenderTexture(RenderTexture&& other) noexcept :
 		Texture(std::move(other)),
 		m_fbo(other.m_fbo),

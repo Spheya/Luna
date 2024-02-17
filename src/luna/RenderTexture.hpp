@@ -8,6 +8,7 @@ namespace luna {
 	class RenderTexture : public Texture, public RenderTarget {
 	public:
 		RenderTexture(int width, int height);
+		RenderTexture(glm::ivec2 size);
 		RenderTexture(RenderTexture&) = delete;
 		RenderTexture& operator=(RenderTexture&) = delete;
 		RenderTexture(RenderTexture&& other) noexcept;

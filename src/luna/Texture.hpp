@@ -16,9 +16,12 @@ namespace luna {
 	public:
 		Texture() = default;
 		Texture(std::uint8_t* data, int width, int height);
+		Texture(std::uint8_t* data, glm::ivec2 size);
 		Texture(Color* data, int width, int height);
+		Texture(Color* data, glm::ivec2 size);
 		Texture(Color color);
 		Texture(int width, int height);
+		Texture(glm::ivec2 size);
 		Texture(Texture&) = delete;
 		Texture& operator=(Texture&) = delete;
 		Texture(Texture&& other) noexcept;
@@ -27,10 +30,12 @@ namespace luna {
 
 		void setTextureData(std::uint8_t* data);
 		void setTextureData(std::uint8_t* data, int width, int height);
+		void setTextureData(std::uint8_t* data, glm::ivec2 size);
 
 		void setTextureData(Color data);
 		void setTextureData(Color* data);
 		void setTextureData(Color* data, int width, int height);
+		void setTextureData(Color* data, glm::ivec2 size);
 
 		void setFilter(TextureFilter filter);
 		void setMinFilter(TextureFilter filter);
