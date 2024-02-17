@@ -27,6 +27,9 @@ namespace luna {
 		void close();
 
 		void makeActiveTarget() override;
+		glm::ivec2 getSize() const override;
+		int getWidth() const override;
+		int getHeight() const override;
 
 	private:
 		bool m_isValid;

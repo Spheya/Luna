@@ -37,6 +37,12 @@ namespace luna {
 			return;
 		}
 		log("Loaded OpenGL", MessageSeverity::Info);
+
+		glEnable(GL_CULL_FACE);
+		glEnable(GL_DEPTH_TEST);
+
+		loadPrimitives();
+
 		log("Luna context created", MessageSeverity::Info);
 
 		m_valid = true;
@@ -59,4 +65,72 @@ namespace luna {
 		return m_graphicsContext;
 	}
 
+	void Context::update() {
+		double curTime = glfwGetTime();
+		m_deltatime = float(curTime - m_prevTime);
+		m_prevTime = curTime;
+	}
+
+	float Context::getDeltatime() const {
+		return m_deltatime;
+	}
+
+	float Context::getTime() const {
+		return float(m_prevTime);
+	}
+
+	const Mesh* Context::getPrimitive(Primitive primitive) const {
+		return &m_primitives[uint8_t(primitive)];
+	}
+
+	void Context::loadPrimitives() {
+		// Quad
+		Vertex quadVertices[] = {
+			Vertex(glm::vec3(-1.0f, +1.0f, 0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f)),
+			Vertex(glm::vec3(-1.0f, -1.0f, 0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)),
+			Vertex(glm::vec3(+1.0f, -1.0f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)),
+			Vertex(glm::vec3(+1.0f, +1.0f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f))
+		};
+		unsigned int quadIndices[] = { 0,1,2, 2,3,0 };
+		m_primitives[uint8_t(Primitive::Quad)].setVertices(quadVertices, 4);
+		m_primitives[uint8_t(Primitive::Quad)].setIndices(quadIndices, 6);
+
+		// Cube
+		Vertex cubeVertices[] = {
+			Vertex(glm::vec3(-0.5f, +0.5f, -0.5f), glm::vec2(0.0f, 0.0f), glm::vec3( 0.0f,  0.0f, -1.0f)),
+			Vertex(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec2(0.0f, 1.0f), glm::vec3( 0.0f,  0.0f, -1.0f)),
+			Vertex(glm::vec3(+0.5f, -0.5f, -0.5f), glm::vec2(1.0f, 1.0f), glm::vec3( 0.0f,  0.0f, -1.0f)),
+			Vertex(glm::vec3(+0.5f, +0.5f, -0.5f), glm::vec2(1.0f, 0.0f), glm::vec3( 0.0f,  0.0f, -1.0f)),
+
+			Vertex(glm::vec3(-0.5f, +0.5f, +0.5f), glm::vec2(0.0f, 0.0f), glm::vec3( 0.0f,  0.0f, +1.0f)),
+			Vertex(glm::vec3(-0.5f, -0.5f, +0.5f), glm::vec2(0.0f, 1.0f), glm::vec3( 0.0f,  0.0f, +1.0f)),
+			Vertex(glm::vec3(+0.5f, -0.5f, +0.5f), glm::vec2(1.0f, 1.0f), glm::vec3( 0.0f,  0.0f, +1.0f)),
+			Vertex(glm::vec3(+0.5f, +0.5f, +0.5f), glm::vec2(1.0f, 0.0f), glm::vec3( 0.0f,  0.0f, +1.0f)),
+			
+			Vertex(glm::vec3(+0.5f, +0.5f, -0.5f), glm::vec2(0.0f, 0.0f), glm::vec3(+1.0f,  0.0f,  0.0f)),
+			Vertex(glm::vec3(+0.5f, -0.5f, -0.5f), glm::vec2(0.0f, 1.0f), glm::vec3(+1.0f,  0.0f,  0.0f)),
+			Vertex(glm::vec3(+0.5f, -0.5f, +0.5f), glm::vec2(1.0f, 1.0f), glm::vec3(+1.0f,  0.0f,  0.0f)),
+			Vertex(glm::vec3(+0.5f, +0.5f, +0.5f), glm::vec2(1.0f, 0.0f), glm::vec3(+1.0f,  0.0f,  0.0f)),
+			
+			Vertex(glm::vec3(-0.5f, +0.5f, -0.5f), glm::vec2(0.0f, 0.0f), glm::vec3(-1.0f,  0.0f,  0.0f)),
+			Vertex(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec2(0.0f, 1.0f), glm::vec3(-1.0f,  0.0f,  0.0f)),
+			Vertex(glm::vec3(-0.5f, -0.5f, +0.5f), glm::vec2(1.0f, 1.0f), glm::vec3(-1.0f,  0.0f,  0.0f)),
+			Vertex(glm::vec3(-0.5f, +0.5f, +0.5f), glm::vec2(1.0f, 0.0f), glm::vec3(-1.0f,  0.0f,  0.0f)),
+			
+			Vertex(glm::vec3(-0.5f, +0.5f, +0.5f), glm::vec2(0.0f, 0.0f), glm::vec3( 0.0f, +1.0f,  0.0f)),
+			Vertex(glm::vec3(-0.5f, +0.5f, -0.5f), glm::vec2(0.0f, 1.0f), glm::vec3( 0.0f, +1.0f,  0.0f)),
+			Vertex(glm::vec3(+0.5f, +0.5f, -0.5f), glm::vec2(1.0f, 1.0f), glm::vec3( 0.0f, +1.0f,  0.0f)),
+			Vertex(glm::vec3(+0.5f, +0.5f, +0.5f), glm::vec2(1.0f, 0.0f), glm::vec3( 0.0f, +1.0f,  0.0f)),
+			
+			Vertex(glm::vec3(-0.5f, -0.5f, +0.5f), glm::vec2(0.0f, 0.0f), glm::vec3( 0.0f, -1.0f,  0.0f)),
+			Vertex(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec2(0.0f, 1.0f), glm::vec3( 0.0f, -1.0f,  0.0f)),
+			Vertex(glm::vec3(+0.5f, -0.5f, -0.5f), glm::vec2(1.0f, 1.0f), glm::vec3( 0.0f, -1.0f,  0.0f)),
+			Vertex(glm::vec3(+0.5f, -0.5f, +0.5f), glm::vec2(1.0f, 0.0f), glm::vec3( 0.0f, -1.0f,  0.0f))
+		};
+		unsigned int cubeIndices[] = { 
+			0,3,1, 3,2,1, 4,5,7, 7,5,6, 8,11,9, 11,10,9, 12,13,15, 15,13,14, 16,19,17, 19,18,17, 20,21,23, 23,21,22
+		};
+		m_primitives[uint8_t(Primitive::Cube)].setVertices(cubeVertices, 24);
+		m_primitives[uint8_t(Primitive::Cube)].setIndices(cubeIndices, 36);
+	}
 }

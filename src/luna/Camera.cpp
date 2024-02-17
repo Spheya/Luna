@@ -35,7 +35,7 @@ namespace luna {
 		return m_transform;
 	}
 
-	Camera::ProjectionType Camera::getProjectionType() const {
+	ProjectionType Camera::getProjectionType() const {
 		return m_projectionType;
 	}
 
@@ -81,6 +81,10 @@ namespace luna {
 
 	void Camera::setOrthographicSize(float size) {
 		m_orthographicSize = size;
+	}
+
+	void Camera::updateAspect() {
+		m_aspect = float(m_target->getWidth()) / float(m_target->getHeight());
 	}
 
 	glm::mat4 Camera::projection() const {

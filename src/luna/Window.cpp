@@ -19,10 +19,10 @@ namespace luna {
 		glfwMakeContextCurrent(m_windowHandle);
 
 		Vertex vertices[] = {
-			Vertex(glm::vec3(-1.0f, +1.0f, 0.0f), glm::vec2(0.0f, 0.0f)),
-			Vertex(glm::vec3(-1.0f, -1.0f, 0.0f), glm::vec2(0.0f, 1.0f)),
-			Vertex(glm::vec3(+1.0f, -1.0f, 0.0f), glm::vec2(1.0f, 1.0f)),
-			Vertex(glm::vec3(+1.0f, +1.0f, 0.0f), glm::vec2(1.0f, 0.0f)),
+			Vertex(glm::vec3(-1.0f, +1.0f, 0.0f), glm::vec2(0.0f, 1.0f)),
+			Vertex(glm::vec3(-1.0f, -1.0f, 0.0f), glm::vec2(0.0f, 0.0f)),
+			Vertex(glm::vec3(+1.0f, -1.0f, 0.0f), glm::vec2(1.0f, 0.0f)),
+			Vertex(glm::vec3(+1.0f, +1.0f, 0.0f), glm::vec2(1.0f, 1.0f)),
 		};
 
 		unsigned int indices[] = { 0,1,2, 2,3,0 };
@@ -31,7 +31,7 @@ namespace luna {
 		m_blitQuad.setIndices(indices, 6);
 
 		m_blitShader.load(
-			"#version 330 core\nin vec3 v;in vec2 c;out vec2 i;void main(){gl_Position=vec4(v,1);i=c;}",
+			"#version 330 core\nin vec3 Position;in vec2 UV;out vec2 i;void main(){gl_Position=vec4(Position,1);i=UV;}",
 			"#version 330 core\nin vec2 i;uniform sampler2D t;out vec4 v;void main(){v=texture(t,i);}"
 		);
 		m_blitShader.uniform(m_blitShader.uniformId("t"), 0);
@@ -100,5 +100,17 @@ namespace luna {
 
 	void Window::makeActiveTarget() {
 		m_contents->makeActiveTarget();
+	}
+
+	glm::ivec2 Window::getSize() const {
+		return m_contents->getSize();
+	}
+
+	int Window::getWidth() const {
+		return m_contents->getWidth();
+	}
+
+	int Window::getHeight() const {
+		return m_contents->getHeight();
 	}
 }

@@ -17,6 +17,14 @@ namespace luna {
 
 		void makeActiveTarget() override;
 
+		int getWidth() const override { return Texture::getWidth(); }
+		int getHeight() const override { return Texture::getHeight(); }
+		glm::ivec2 getSize() const override { return Texture::getSize(); }
+		
+		using Texture::getWidth;
+		using Texture::getHeight;
+		using Texture::getSize;
+
 	private:		
 		unsigned int m_fbo = 0;
 		unsigned int m_rbo = 0;

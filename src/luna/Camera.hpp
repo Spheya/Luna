@@ -5,10 +5,10 @@
 
 namespace luna {
 
+	enum class ProjectionType : std::uint8_t { Perspective, Orthographic };
+
 	class Camera {
 	public:
-		enum class ProjectionType : std::uint8_t { Perspective, Orthographic };
-
 		explicit Camera(RenderTarget* target, Transform transform = Transform(glm::vec3(0.0f, 0.0f, 1.0f)));
 
 		void setTarget(RenderTarget* target);
@@ -31,6 +31,7 @@ namespace luna {
 		float getOrthographicSize() const;
 		void setOrthographicSize(float size);
 
+		void updateAspect();
 		glm::mat4 projection() const;
 
 	private:

@@ -66,9 +66,9 @@ namespace luna {
 
 		glGenBuffers(2, m_vbos);
 		glBindBuffer(GL_ARRAY_BUFFER, m_vbos[Vertices]);
-		glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), (void*)0);  // Position
-		glVertexAttribPointer(1, 2, GL_FLOAT, false, sizeof(Vertex), (void*)12); // Uv
-		glVertexAttribPointer(2, 3, GL_FLOAT, false, sizeof(Vertex), (void*)20); // Normal
+		glVertexAttribPointer(0, 3, GL_FLOAT, false, 32, (void*)0);  // Position
+		glVertexAttribPointer(1, 2, GL_FLOAT, false, 32, (void*)12); // Uv
+		glVertexAttribPointer(2, 3, GL_FLOAT, false, 32, (void*)20); // Normal
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 		glEnableVertexAttribArray(2);
