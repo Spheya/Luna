@@ -15,7 +15,7 @@ namespace luna {
 	class Texture {
 	public:
 		Texture() = default;
-		Texture(uint8_t* data, int width, int height);
+		Texture(std::uint8_t* data, int width, int height);
 		Texture(Color* data, int width, int height);
 		Texture(Color color);
 		Texture(int width, int height);
@@ -23,10 +23,10 @@ namespace luna {
 		Texture& operator=(Texture&) = delete;
 		Texture(Texture&& other) noexcept;
 		Texture& operator=(Texture&& other) noexcept;
-		virtual ~Texture() = default;
+		virtual ~Texture();
 
-		void setTextureData(uint8_t* data);
-		void setTextureData(uint8_t* data, int width, int height);
+		void setTextureData(std::uint8_t* data);
+		void setTextureData(std::uint8_t* data, int width, int height);
 
 		void setTextureData(Color data);
 		void setTextureData(Color* data);
@@ -52,6 +52,12 @@ namespace luna {
 
 		void bind(int textureSlot) const;
 
+	protected:
+		unsigned int getTextureHandle() const;
+		virtual void onSizeChange(int width, int height) {};
+
+		void bind() const;
+
 	private:
 		unsigned int m_texture = 0;
 
@@ -59,10 +65,8 @@ namespace luna {
 
 		TextureFilter m_minFilter = TextureFilter::Linear;
 		TextureFilter m_magFilter = TextureFilter::Nearest;
-		TextureWrapMode m_horizontalWrap = TextureWrapMode::Repeat;
-		TextureWrapMode m_verticalWrap = TextureWrapMode::Repeat;
-
-		void bind() const;
+		TextureWrapMode m_horizontalWrap = TextureWrapMode::Clamp;
+		TextureWrapMode m_verticalWrap = TextureWrapMode::Clamp;
 	};
 
 }

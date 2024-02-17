@@ -68,7 +68,7 @@ namespace luna {
 	}
 
 	void Material::setValue(const char* name, Color value) {
-		setParam(m_vec4Params, name, value.asVec4());
+		setParam(m_vec4Params, name, value.vec4());
 	}
 
 	void Material::setValue(const char* name, const Texture* value) {

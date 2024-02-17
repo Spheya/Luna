@@ -41,10 +41,7 @@ namespace luna {
 	}
 
 	Mesh& Mesh::operator=(Mesh&& other) noexcept {
-		if (m_vao != 0) {
-			glDeleteVertexArrays(1, &m_vao);
-			glDeleteBuffers(2, m_vbos);
-		}
+		Mesh::~Mesh();
 
 		m_vao = other.m_vao;
 		m_vbos[Vertices] = other.m_vbos[Vertices];

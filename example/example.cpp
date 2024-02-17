@@ -3,6 +3,8 @@
 #include <luna.hpp>
 #include <luna/Window.hpp>
 
+#include <glad/glad.h>
+
 int main() {
 	luna::setMessageCallback([](const char* message, const char* prefix, luna::MessageSeverity severity) {
 		std::cout << '<' << prefix << "> " << message << std::endl;
@@ -10,7 +12,6 @@ int main() {
 
 	luna::Context context;
 	luna::Window window(context, "Luna example");
-	luna::Camera camera(&window);
 	luna::Renderer renderer;
 
 	luna::Mesh quad{
@@ -59,7 +60,14 @@ int main() {
 	material.setColor(luna::Color::Blue);
 	material.setTexture(&tex);
 
+	luna::Camera camera(&window);
+	camera.setBackgroundColor(luna::Color::Magenta);
+
 	while (!context.isCloseRequested() && !window.isCloseRequested()) {
+		auto err = glGetError();
+		if (err)
+			std::cout << "GL Error: " << std::to_string(err) << std::endl;
+
 		renderer.beginFrame();
 
 		renderer.push(&quad, glm::mat4(), &material);

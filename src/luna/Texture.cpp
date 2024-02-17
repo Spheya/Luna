@@ -6,7 +6,7 @@
 
 namespace luna {
 
-	Texture::Texture(uint8_t* data, int width, int height) :
+	Texture::Texture(std::uint8_t* data, int width, int height) :
 		m_dimensions(width, height)
 	{
 		setTextureData(data);
@@ -22,9 +22,7 @@ namespace luna {
 		Texture(&color, 1, 1)
 	{}
 
-	Texture::Texture(int width, int height) :
-		m_dimensions(width, height)
-	{
+	Texture::Texture(int width, int height) {
 		setSize(width, height);
 	}
 
@@ -40,6 +38,8 @@ namespace luna {
 	}
 
 	Texture& Texture::operator=(Texture&& other) noexcept {
+		Texture::~Texture();
+
 		m_texture = other.m_texture;
 		m_dimensions = other.m_dimensions;
 		m_minFilter = other.m_minFilter;
@@ -52,11 +52,16 @@ namespace luna {
 		return *this;
 	}
 
-	void Texture::setTextureData(uint8_t* data) {
+	Texture::~Texture() {
+		if(m_texture)
+			glDeleteTextures(1, &m_texture);
+	}
+
+	void Texture::setTextureData(std::uint8_t* data) {
 		setTextureData(data, m_dimensions.x, m_dimensions.y);
 	}
 
-	void Texture::setTextureData(uint8_t* data, int width, int height) {
+	void Texture::setTextureData(std::uint8_t* data, int width, int height) {
 		if (m_texture == 0) {
 			if (width < 1 || height < 1) {
 				log("Trying to use a texture with a size smaller than 1x1", MessageSeverity::Error);
@@ -75,6 +80,7 @@ namespace luna {
 			if (m_dimensions == glm::ivec2(width, height)) {
 				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
 			} else {
+				onSizeChange(width, height);
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 			}
 		}
@@ -96,13 +102,19 @@ namespace luna {
 			return;
 		}
 
-		int* buffer = new int[width * height];
+		std::uint8_t* buffer = new std::uint8_t[width * height * 4];
 
-		for (int y = 0; y < height; y++)
-			for (int x = 0; x < width; x++)
-				buffer[x + y * width] = data[x + y * width].asInt();
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				auto pixel = data[x + y * width].rgba();
+				buffer[4 * (x + y * width) + 0] = pixel.r;
+				buffer[4 * (x + y * width) + 1] = pixel.g;
+				buffer[4 * (x + y * width) + 2] = pixel.b;
+				buffer[4 * (x + y * width) + 3] = pixel.a;
+			}
+		}
 
-		setTextureData((uint8_t*)buffer, width, height);
+		setTextureData(buffer, width, height);
 
 		delete[] buffer;
 	}
@@ -194,13 +206,8 @@ namespace luna {
 	}
 
 	void Texture::setSize(int width, int height) {
-		if (m_dimensions != glm::ivec2(width, height)) {
-			bind();
-
-			uint8_t* buffer = new uint8_t[width * height];
-			setTextureData(buffer, width, height);
-			delete[] buffer;
-		}
+		if (m_dimensions != glm::ivec2(width, height))
+			setTextureData((std::uint8_t*)nullptr, width, height);
 	}
 
 	void Texture::setSize(glm::ivec2 size) {
@@ -215,6 +222,10 @@ namespace luna {
 
 		glActiveTexture(GL_TEXTURE0 + textureSlot);
 		bind();
+	}
+
+	unsigned int Texture::getTextureHandle() const {
+		return m_texture;
 	}
 
 	void Texture::bind() const {

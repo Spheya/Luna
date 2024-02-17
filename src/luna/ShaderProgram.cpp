@@ -42,15 +42,17 @@ namespace luna {
 		m_valid(other.m_valid)
 	{
 		other.m_program = 0;
+		other.m_valid = false;
 	}
 
 	ShaderProgram& ShaderProgram::operator=(ShaderProgram&& other) noexcept {
-		if (m_program != 0)
-			glDeleteProgram(m_program);
+		ShaderProgram::~ShaderProgram();
 
 		m_program = other.m_program;
 		m_valid = other.m_valid;
+
 		other.m_program = 0;
+		other.m_valid = false;
 
 		return *this;
 	}

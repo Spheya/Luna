@@ -21,9 +21,10 @@ namespace luna {
 		GLM_CONSTEXPR Color(glm::vec4 color) : Color(color.r, color.g, color.b, color.a) {}
 		GLM_CONSTEXPR Color(glm::vec3 color) : Color(color.r, color.g, color.b) {}
 
-		glm::vec3 asVec3() const;
-		glm::vec4 asVec4() const;
-		unsigned int asInt() const;
+		glm::vec3 vec3() const;
+		glm::vec4 vec4() const;
+		glm::u8vec3 rgb() const;
+		glm::u8vec4 rgba() const;
 
 		float r, g, b, a;
 	};

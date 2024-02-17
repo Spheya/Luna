@@ -2,9 +2,10 @@
 
 #include <memory>
 
-#include "Math.hpp"
-#include "RenderTarget.hpp"
 #include "Context.hpp"
+#include "RenderTexture.hpp"
+#include "ShaderProgram.hpp"
+#include "Mesh.hpp"
 
 struct GLFWwindow;
 
@@ -14,6 +15,10 @@ namespace luna {
 	public:
 		Window(const Context& context, const char* title, glm::ivec2 size = glm::ivec2(960, 640));
 		Window(const Context& context, const char* title, int width, int height);
+		Window(Window&) = delete;
+		Window& operator=(Window&) = delete;
+		Window(Window&& other) noexcept;
+		Window& operator=(Window&& other) noexcept;
 		~Window();
 
 		bool isValid() const;
@@ -27,6 +32,10 @@ namespace luna {
 		bool m_isValid;
 
 		GLFWwindow* m_windowHandle;
+
+		Mesh m_blitQuad;
+		ShaderProgram m_blitShader;
+		std::unique_ptr<RenderTexture> m_contents;
 	};
 
 }

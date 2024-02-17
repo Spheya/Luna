@@ -24,20 +24,30 @@ namespace luna {
 		Color(float(r) / 255.0f, float(g) / 255.0f, float(b) / 255.0f, float(a) / 255.0f)
 	{}
 
-	glm::vec3 Color::asVec3() const {
+	glm::vec3 Color::vec3() const {
 		return glm::vec3(r, g, b);
 	}
 
-	glm::vec4 Color::asVec4() const {
+	glm::vec4 Color::vec4() const {
 		return glm::vec4(r, g, b, a);
 	}
 
-	unsigned int Color::asInt() const {
-		return 
-			(std::max(std::min(unsigned(r * 255.0f), unsigned(0xff)), unsigned(0x00)) <<  0) |
-			(std::max(std::min(unsigned(g * 255.0f), unsigned(0xff)), unsigned(0x00)) <<  8) |
-			(std::max(std::min(unsigned(b * 255.0f), unsigned(0xff)), unsigned(0x00)) << 16) |
-			(std::max(std::min(unsigned(a * 255.0f), unsigned(0xff)), unsigned(0x00)) << 24);
+
+	glm::u8vec3 Color::rgb() const {
+		return glm::u8vec3(
+			std::uint8_t(std::clamp(r, 0.0f, 1.0f) * 255.0f),
+			std::uint8_t(std::clamp(g, 0.0f, 1.0f) * 255.0f),
+			std::uint8_t(std::clamp(b, 0.0f, 1.0f) * 255.0f)
+		);
+	}
+
+	glm::u8vec4 Color::rgba() const {
+		return glm::u8vec4(
+			std::uint8_t(std::clamp(r, 0.0f, 1.0f) * 255.0f),
+			std::uint8_t(std::clamp(g, 0.0f, 1.0f) * 255.0f),
+			std::uint8_t(std::clamp(b, 0.0f, 1.0f) * 255.0f),
+			std::uint8_t(std::clamp(a, 0.0f, 1.0f) * 255.0f)
+		);
 	}
 
 }
