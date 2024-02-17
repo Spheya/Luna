@@ -106,6 +106,11 @@ namespace luna {
 		return glGetUniformLocation(m_program, name);
 	}
 
+	void ShaderProgram::uniform(int id, int value) {
+		bind();
+		glUniform1i(id, value);
+	}
+
 	void ShaderProgram::uniform(int id, float value) {
 		bind();
 		glUniform1f(id, value);

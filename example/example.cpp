@@ -34,10 +34,11 @@ int main() {
 		out vec4 vertexColor;\n\
 		\n\
 		uniform vec4 MainColor;\n\
+		uniform sampler2D MainTexture;\n\
 		\n\
 		void main() {\n\
 			gl_Position = vec4(position, 1.0);\n\
-			vertexColor = MainColor;\n\
+			vertexColor = texture(MainTexture, uv);\n\
 		}\n",
 		
 		"\
@@ -52,8 +53,11 @@ int main() {
 		}\n"
 	);
 
+	luna::Texture tex(luna::Color::Yellow);
+
 	luna::Material material(&shader);
 	material.setColor(luna::Color::Blue);
+	material.setTexture(&tex);
 
 	while (!context.isCloseRequested() && !window.isCloseRequested()) {
 		renderer.beginFrame();

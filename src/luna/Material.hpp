@@ -4,6 +4,7 @@
 #include <string>
 
 #include "Shader.hpp"
+#include "Texture.hpp"
 
 namespace luna {
 
@@ -18,6 +19,7 @@ namespace luna {
 		void bind() const;
 
 		void setColor(Color value);
+		void setTexture(const Texture* value);
 		void setValue(const char* name, float value);
 		void setValue(const char* name, glm::vec1 value);
 		void setValue(const char* name, glm::vec2 value);
@@ -26,6 +28,7 @@ namespace luna {
 		void setValue(const char* name, glm::mat3 value);
 		void setValue(const char* name, glm::mat4 value);
 		void setValue(const char* name, Color value);
+		void setValue(const char* name, const Texture* value);
 
 	private:
 		template<typename T>
@@ -48,6 +51,7 @@ namespace luna {
 			vector.emplace_back(hash, name, value);
 		}
 
+		std::vector<Parameter<const Texture*>> m_textureParams;
 		std::vector<Parameter<float>> m_floatParams;
 		std::vector<Parameter<glm::vec2>> m_vec2Params;
 		std::vector<Parameter<glm::vec3>> m_vec3Params;

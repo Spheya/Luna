@@ -1,5 +1,7 @@
 #include "Color.hpp"
 
+#include <algorithm>
+
 namespace luna {
 
 	Color Color::Red(1.0f, 0.0f, 0.0f);
@@ -28,6 +30,14 @@ namespace luna {
 
 	glm::vec4 Color::asVec4() const {
 		return glm::vec4(r, g, b, a);
+	}
+
+	unsigned int Color::asInt() const {
+		return 
+			(std::max(std::min(unsigned(r * 255.0f), unsigned(0xff)), unsigned(0x00)) <<  0) |
+			(std::max(std::min(unsigned(g * 255.0f), unsigned(0xff)), unsigned(0x00)) <<  8) |
+			(std::max(std::min(unsigned(b * 255.0f), unsigned(0xff)), unsigned(0x00)) << 16) |
+			(std::max(std::min(unsigned(a * 255.0f), unsigned(0xff)), unsigned(0x00)) << 24);
 	}
 
 }

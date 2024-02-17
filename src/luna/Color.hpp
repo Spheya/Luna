@@ -23,6 +23,7 @@ namespace luna {
 
 		glm::vec3 asVec3() const;
 		glm::vec4 asVec4() const;
+		unsigned int asInt() const;
 
 		float r, g, b, a;
 	};

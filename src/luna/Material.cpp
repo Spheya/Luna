@@ -24,10 +24,19 @@ namespace luna {
 		for (const auto& param : m_vec4Params)  program->uniform(program->uniformId(param.name.c_str()), param.value);
 		for (const auto& param : m_mat3Params)  program->uniform(program->uniformId(param.name.c_str()), param.value);
 		for (const auto& param : m_mat4Params)  program->uniform(program->uniformId(param.name.c_str()), param.value);
+
+		for (int i = 0; i < m_textureParams.size(); i++) {
+			program->uniform(program->uniformId(m_textureParams[i].name.c_str()), i);
+			m_textureParams[i].value->bind(i);
+		}
 	}
 
 	void Material::setColor(Color color) {
 		setValue("MainColor", color);
+	}
+
+	void Material::setTexture(const Texture* value) {
+		setValue("MainTexture", value);
 	}
 
 	void Material::setValue(const char* name, float value) {
@@ -60,5 +69,9 @@ namespace luna {
 
 	void Material::setValue(const char* name, Color value) {
 		setParam(m_vec4Params, name, value.asVec4());
+	}
+
+	void Material::setValue(const char* name, const Texture* value) {
+		setParam(m_textureParams, name, value);
 	}
 }
