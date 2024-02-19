@@ -9,7 +9,7 @@ namespace luna {
 
 	class Camera {
 	public:
-		explicit Camera(RenderTarget* target, Transform transform = Transform(glm::vec3(0.0f, 0.0f, 1.0f)));
+		explicit Camera(RenderTarget* target = nullptr, Transform transform = Transform(glm::vec3(0.0f, 0.0f, 1.0f)));
 
 		void setTarget(RenderTarget* target);
 		RenderTarget* getTarget() const;

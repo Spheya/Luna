@@ -23,17 +23,19 @@ namespace luna {
 	}
 
 	void Renderer::render(const Camera& camera) const {
-		camera.getTarget()->makeActiveTarget();
-		RenderTarget::clear(camera.getBackgroundColor());
+		if (camera.getTarget()) {
+			camera.getTarget()->makeActiveTarget();
+			RenderTarget::clear(camera.getBackgroundColor());
 
-		for (const auto& object : m_renderObjects) {
-			object.mesh->bind();
-			object.material->bind();
-			auto& shader = object.material->getShader()->getProgram();
-			shader.uniform(shader.uniformId("ModelMatrix"), object.matrix);
-			shader.uniform(shader.uniformId("ViewMatrix"), camera.getTransform().inverseMatrix());
-			shader.uniform(shader.uniformId("ProjectionMatrix"), camera.projection());
-			draw(object.mesh);
+			for (const auto& object : m_renderObjects) {
+				object.mesh->bind();
+				object.material->bind();
+				auto& shader = object.material->getShader()->getProgram();
+				shader.uniform(shader.uniformId("ModelMatrix"), object.matrix);
+				shader.uniform(shader.uniformId("ViewMatrix"), camera.getTransform().inverseMatrix());
+				shader.uniform(shader.uniformId("ProjectionMatrix"), camera.projection());
+				draw(object.mesh);
+			}
 		}
 	}
 
