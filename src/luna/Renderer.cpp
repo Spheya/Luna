@@ -2,6 +2,8 @@
 
 #include <glad/glad.h>
 
+#include "Context.hpp"
+
 namespace luna {
 
 	void Renderer::beginFrame() {
@@ -14,6 +16,10 @@ namespace luna {
 
 	void Renderer::push(const Mesh* mesh, glm::mat4 matrix, const Material* material) {
 		m_renderObjects.emplace_back(mesh, matrix, material);
+	}
+
+	void Renderer::push(const Mesh* mesh, glm::mat4 matrix) {
+		m_renderObjects.emplace_back(mesh, matrix, luna::getDefaultMaterial());
 	}
 
 	void Renderer::render(const Camera& camera) const {

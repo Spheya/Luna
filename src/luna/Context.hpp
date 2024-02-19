@@ -2,8 +2,10 @@
 
 #include <vector>
 #include "Mesh.hpp"
-
-struct GLFWwindow;
+#include "Shader.hpp"
+#include "Material.hpp"
+#include "RenderTarget.hpp"
+#include "Texture.hpp"
 
 namespace luna {
 
@@ -11,34 +13,23 @@ namespace luna {
 		Quad, Cube
 	};
 
-	class Context {
-	public:
-		Context();
-		Context(Context&) = delete;
-		Context& operator=(Context&) = delete;
-		Context(Context&&) = delete;
-		Context& operator=(Context&&) = delete;
-		~Context();
+	void initialize();
+	void terminate();
 
-		bool isValid() const;
-		bool isCloseRequested() const;
-		GLFWwindow* getGraphicsContext() const;
+	bool isContextValid();
+	void* getGraphicsContext();
 
-		void update();
-		float getDeltatime() const;
-		float getTime() const;
+	void update();
 
-		const Mesh* getPrimitive(Primitive primitive) const;
+	float getDeltatime();
+	float getTime();
 
-	private:
-		bool m_valid;
-		GLFWwindow* m_graphicsContext;
-		
-		float m_deltatime;
-		double m_prevTime;
+	const Mesh* getPrimitive(Primitive primitive);
+	const Shader* getDefaultShader();
+	const Material* getDefaultMaterial();
 
-		Mesh m_primitives[2];
-		void loadPrimitives();
-	};
+	void blit(Texture* source, RenderTarget* target);
+
+	bool isCloseRequested();
 
 }

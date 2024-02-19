@@ -153,10 +153,6 @@ namespace luna {
 	}
 
 	void ShaderProgram::bind() const {
-		static const ShaderProgram* boundShader = nullptr;
-		if (boundShader != this) {
-			glUseProgram(m_program);
-			boundShader = this;
-		}
+		glUseProgram(m_program);
 	}
 }

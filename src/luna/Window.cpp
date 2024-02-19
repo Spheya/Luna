@@ -3,13 +3,15 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "Logger.hpp"
+#include "Context.hpp"
 
 namespace luna {
 
-	Window::Window(const Context& context, const char* title, glm::ivec2 size) :
+	Window::Window(const char* title, glm::ivec2 size) :
 		m_isValid(false)
 	{
-		m_windowHandle = glfwCreateWindow(size.x, size.y, title, nullptr, context.getGraphicsContext());
+		m_contents = std::make_unique<RenderTexture>(size.x, size.y);
+		m_windowHandle = glfwCreateWindow(size.x, size.y, title, nullptr, (GLFWwindow*)luna::getGraphicsContext());
 
 		if (!m_windowHandle) {
 			log("An error occured while creating a window", MessageSeverity::Error);
@@ -36,16 +38,18 @@ namespace luna {
 		);
 		m_blitShader.uniform(m_blitShader.uniformId("t"), 0);
 
-		glfwMakeContextCurrent(context.getGraphicsContext());
-		
-		m_contents = std::make_unique<RenderTexture>(size.x, size.y);
+		m_contents->bind(0);
+		m_blitShader.bind();
+		m_blitQuad.bind();
+
+		glfwMakeContextCurrent((GLFWwindow*)luna::getGraphicsContext());
 
 		m_isValid = true;
-		log("Created window", MessageSeverity::Info);
+		log("Window created", MessageSeverity::Info);
 	}
 
-	Window::Window(const Context& context, const char* title, int width, int height) :
-		Window(context, title, glm::ivec2(width, height))
+	Window::Window(const char* title, int width, int height) :
+		Window(title, glm::ivec2(width, height))
 	{}
 
 	Window::Window(Window&& other) noexcept :
@@ -73,7 +77,7 @@ namespace luna {
 	Window::~Window() {
 		if (m_windowHandle) {
 			glfwDestroyWindow(m_windowHandle);
-			log("Closed window", MessageSeverity::Info);
+			log("Window closed", MessageSeverity::Info);
 		}
 	}
 
@@ -82,16 +86,12 @@ namespace luna {
 	}
 
 	void Window::update() {
-		auto* currentContext = glfwGetCurrentContext();
 		glfwMakeContextCurrent(m_windowHandle);
-		m_contents->bind(0);
-		m_blitShader.bind();
-		m_blitQuad.bind();
-		glDrawElements(GL_TRIANGLES, GLsizei(m_blitQuad.vertexCount()), GL_UNSIGNED_INT, nullptr);
-		glfwMakeContextCurrent(currentContext);
 
+		glDrawElements(GL_TRIANGLES, GLsizei(m_blitQuad.vertexCount()), GL_UNSIGNED_INT, nullptr);
 		glfwSwapBuffers(m_windowHandle);
-		glfwPollEvents();
+
+		glfwMakeContextCurrent((GLFWwindow*)luna::getGraphicsContext());
 	}
 
 	bool Window::isCloseRequested() const {

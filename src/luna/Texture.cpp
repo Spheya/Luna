@@ -249,12 +249,7 @@ namespace luna {
 	}
 
 	void Texture::bind() const {
-		static const Texture* boundTexture = nullptr;
-		if (boundTexture != this) {
-			glBindTexture(GL_TEXTURE_2D, m_texture);
-			boundTexture = this;
-		}
-		
+		glBindTexture(GL_TEXTURE_2D, m_texture);
 	}
 
 }

@@ -58,7 +58,7 @@ namespace luna {
 		std::vector<Parameter<glm::vec4>> m_vec4Params;
 		std::vector<Parameter<glm::mat3>> m_mat3Params;
 		std::vector<Parameter<glm::mat4>> m_mat4Params;
-		Shader* m_shader;
+		Shader* m_shader = nullptr;
 	};
 
 }

@@ -93,11 +93,7 @@ namespace luna {
 	}
 
 	void Mesh::bind() const {
-		static const Mesh* boundVao = nullptr;
-		if (boundVao != this) {
-			glBindVertexArray(m_vao);
-			boundVao = this;
-		}
+		glBindVertexArray(m_vao);
 	}
 
 	size_t Mesh::vertexCount() const {

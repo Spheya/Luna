@@ -13,6 +13,7 @@ namespace luna {
 		virtual ~Renderer() = default;
 
 		void push(const Mesh* mesh, const glm::mat4 matrix, const Material* material);
+		void push(const Mesh* mesh, const glm::mat4 matrix);
 
 		virtual void beginFrame();
 		virtual void endFrame();
