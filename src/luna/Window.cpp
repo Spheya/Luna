@@ -98,6 +98,11 @@ namespace luna {
 		return glfwWindowShouldClose(m_windowHandle);
 	}
 
+	void Window::close() {
+		glfwDestroyWindow(m_windowHandle);
+		log("Window closed", MessageSeverity::Info);
+	}
+
 	void Window::makeActiveTarget() {
 		m_contents->makeActiveTarget();
 	}
@@ -112,5 +117,9 @@ namespace luna {
 
 	int Window::getHeight() const {
 		return m_contents->getHeight();
+	}
+
+	GLFWwindow* Window::getInternalWindowPointer() {
+		return m_windowHandle;
 	}
 }

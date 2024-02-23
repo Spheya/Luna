@@ -15,21 +15,22 @@ namespace luna {
 		float deltatime = 0.0f;
 		double time = 0.0f;
 
-		std::unique_ptr<Mesh> primitives[2];
+		std::unique_ptr<Mesh> primitives[3];
 
 		std::unique_ptr<ShaderProgram> blitShader;
 		std::unique_ptr<Mesh> blitQuad;
 
 		std::unique_ptr<Shader> defaultShader;
+		std::unique_ptr<Texture> defaultTexture;
 		std::unique_ptr<Material> defaultMaterial;
 
 		void loadPrimitives() {
 			// Quad
 			Vertex quadVertices[] = {
-				Vertex(glm::vec3(-1.0f, +1.0f, 0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f)),
-				Vertex(glm::vec3(-1.0f, -1.0f, 0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)),
-				Vertex(glm::vec3(+1.0f, -1.0f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)),
-				Vertex(glm::vec3(+1.0f, +1.0f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f))
+				Vertex(glm::vec3(-0.5f, +0.5f, 0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f)),
+				Vertex(glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)),
+				Vertex(glm::vec3(+0.5f, -0.5f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)),
+				Vertex(glm::vec3(+0.5f, +0.5f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f))
 			};
 			unsigned int quadIndices[] = { 0,1,2, 2,3,0 };
 			primitives[uint8_t(Primitive::Quad)] = std::make_unique<Mesh>(quadVertices, 4, quadIndices, 6);
@@ -71,15 +72,18 @@ namespace luna {
 			};
 			primitives[uint8_t(Primitive::Cube)] = std::make_unique<Mesh>(cubeVertices, 24, cubeIndices, 36);
 
+			// Teapot
+			#include "Teapot.primitive"
+
 			// Blitquad
-			Vertex vertices[] = {
+			Vertex blitQuadVertices[] = {
 				Vertex(glm::vec3(-1.0f, +1.0f, 0.0f), glm::vec2(0.0f, 1.0f)),
 				Vertex(glm::vec3(-1.0f, -1.0f, 0.0f), glm::vec2(0.0f, 0.0f)),
 				Vertex(glm::vec3(+1.0f, -1.0f, 0.0f), glm::vec2(1.0f, 0.0f)),
 				Vertex(glm::vec3(+1.0f, +1.0f, 0.0f), glm::vec2(1.0f, 1.0f)),
 			};
-			unsigned int indices[] = { 0,1,2, 2,3,0 };
-			blitQuad = std::make_unique<Mesh>(vertices, 4, indices, 6);
+			unsigned int blitQuadIndices[] = { 0,1,2, 2,3,0 };
+			blitQuad = std::make_unique<Mesh>(blitQuadVertices, 4, blitQuadIndices, 6);
 		}
 
 		void loadShaders() {
@@ -92,6 +96,8 @@ namespace luna {
 				layout(location = 2) in vec3 Normal;\n\
 				\n\
 				out vec4 vertexColor;\n\
+				out vec2 uv;\n\
+				out vec3 normal;\n\
 				\n\
 				uniform vec4 MainColor;\n\
 				\n\
@@ -101,21 +107,29 @@ namespace luna {
 				\n\
 				void main() {\n\
 					gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(Position, 1.0);\n\
-					vertexColor = vec4(Normal * 0.5 + 0.5, 0.0);\n\
+					vertexColor = MainColor;\n\
+					uv = UV;\n\
+					normal = mat3(ModelMatrix) * Normal;\n\
 				}\n",
 
 				"\
 				#version 330 core\n\
 				\n\
 				in vec4 vertexColor;\n\
+				in vec2 uv;\n\
+				in vec3 normal;\n\
 				\n\
-				out vec4 FragColor;\n\
+				uniform sampler2D MainTexture;\n\
+				\n\
+				out vec4 fragColor;\n\
 				\n\
 				void main() {\n\
-					FragColor = vertexColor;\n\
+					fragColor = texture(MainTexture, uv) * vertexColor * pow(max(dot(normalize(normal), normalize(vec3(1.0, 1.0, 1.0))), 0.0) * 0.6 + (normal.y * 0.5 + 0.5) * 0.38 + 0.02, 1.0 / 2.2);\n\
 				}\n"
 			);
+			defaultTexture = std::make_unique<Texture>(Color::White);
 			defaultMaterial = std::make_unique<Material>(defaultShader.get());
+			defaultMaterial->setMainTexture(defaultTexture.get());
 
 			blitShader = std::make_unique<ShaderProgram>(
 				"#version 330 core\nin vec3 Position;in vec2 UV;out vec2 i;void main(){gl_Position=vec4(Position,1);i=UV;}",
@@ -168,6 +182,7 @@ namespace luna {
 		for (int i = 0; i < sizeof(primitives) / sizeof(*primitives); i++)
 			primitives[i].release();
 		defaultShader.release();
+		defaultTexture.release();
 		defaultMaterial.release();
 		blitShader.release();
 

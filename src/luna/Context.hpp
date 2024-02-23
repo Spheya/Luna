@@ -10,7 +10,7 @@
 namespace luna {
 
 	enum class Primitive : uint8_t {
-		Quad, Cube
+		Quad, Cube, Teapot
 	};
 
 	void initialize();

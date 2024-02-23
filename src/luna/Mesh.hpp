@@ -24,6 +24,8 @@ namespace luna {
 		void bind() const;
 		size_t vertexCount() const;
 
+		static Mesh loadFromFile(const char* filepath);
+
 	private:
 		enum BufferIndex {
 			Vertices = 0,

@@ -10,7 +10,7 @@ namespace luna {
 
 	class Material {
 	public:
-		Material() = default;
+		Material();
 		explicit Material(Shader* shader);
 
 		void setShader(Shader* shader);
@@ -18,8 +18,8 @@ namespace luna {
 
 		void bind() const;
 
-		void setColor(Color value);
-		void setTexture(const Texture* value);
+		void setMainColor(Color value);
+		void setMainTexture(const Texture* value);
 		void setValue(const char* name, float value);
 		void setValue(const char* name, glm::vec1 value);
 		void setValue(const char* name, glm::vec2 value);

@@ -15,3 +15,11 @@ namespace luna {
 		glm::vec3 normal;
 	};
 }
+
+inline GLM_CONSTEXPR bool operator==(const luna::Vertex& v1, const luna::Vertex& v2) {
+	return v1.position == v2.position && v1.uv == v2.uv && v1.normal == v2.normal;
+}
+
+inline GLM_CONSTEXPR bool operator!=(const luna::Vertex& v1, const luna::Vertex& v2) {
+	return !(v1 == v2);
+}

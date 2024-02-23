@@ -14,9 +14,8 @@ add_library (luna "src/luna/Window.cpp" "src/luna/Camera.cpp" "src/luna/Mesh.cpp
 set_property(TARGET luna PROPERTY CXX_STANDARD 20)
 
 target_include_directories(luna PUBLIC "src")
-target_include_directories(luna PUBLIC "external")
 
-target_link_libraries(luna PUBLIC glm glfw glad)
+target_link_libraries(luna PUBLIC glm glfw glad tiny_obj_loader)
 
 install(TARGETS luna DESTINATION lib)
 install(FILES LICENSE DESTINATION .)

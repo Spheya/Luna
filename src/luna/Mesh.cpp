@@ -1,9 +1,82 @@
 #include "Mesh.hpp"
 
+#define TINYOBJLOADER_IMPLEMENTATION
+#include <tiny_obj_loader/tiny_obj_loader.h>
 #include <glad/glad.h>
 #include <numeric>
 
+#include "Logger.hpp"
+
 namespace luna {
+
+	namespace {
+
+		Mesh loadObj(const char* filepath) {
+			tinyobj::ObjReaderConfig config;
+			tinyobj::ObjReader reader;
+
+			if (!reader.ParseFromFile(filepath, config)) {
+				if (!reader.Error().empty()) {
+					log("Error occured while loading model: " + reader.Error(), MessageSeverity::Error);
+					return Mesh();
+				}
+			}
+
+			if (!reader.Warning().empty())
+				log("Warning from loading model: " + reader.Warning(), MessageSeverity::Warning);
+
+			auto& attrib = reader.GetAttrib();
+			auto& shapes = reader.GetShapes();
+
+			std::vector<Vertex> vertices;
+			vertices.reserve(shapes.size() * 3);
+
+			// Loop over shapes
+			for (size_t s = 0; s < shapes.size(); s++) {
+				// Loop over faces(polygon)
+				size_t index_offset = 0;
+				for (size_t f = 0; f < shapes[s].mesh.num_face_vertices.size(); f++) {
+					size_t fv = size_t(shapes[s].mesh.num_face_vertices[f]);
+
+					// Loop over vertices in the face.
+					for (size_t v = 0; v < fv; v++) {
+						tinyobj::index_t index = shapes[s].mesh.indices[index_offset + v];
+
+						glm::vec3 pos = glm::vec3(
+							attrib.vertices[size_t(index.vertex_index) * 3 + 0],
+							attrib.vertices[size_t(index.vertex_index) * 3 + 1],
+							attrib.vertices[size_t(index.vertex_index) * 3 + 2]
+						);
+
+						glm::vec2 uv(0.0f);
+						if (index.texcoord_index >= 0) {
+							uv = glm::vec2(
+								attrib.texcoords[size_t(index.texcoord_index) * 2 + 0],
+								attrib.texcoords[size_t(index.texcoord_index) * 2 + 1]
+							);
+						}
+
+						glm::vec3 normal(0.0f);
+						if (index.normal_index >= 0) {
+							normal = glm::vec3(
+								attrib.normals[size_t(index.normal_index) * 3 + 0],
+								attrib.normals[size_t(index.normal_index) * 3 + 1],
+								attrib.normals[size_t(index.normal_index) * 3 + 2]
+							);
+						}
+
+						vertices.emplace_back(pos, uv, normal);
+					}
+
+					index_offset += fv;
+				}
+			}
+
+			return Mesh(vertices.data(), vertices.size());
+		}
+
+	}
+
 	Mesh::Mesh() :
 		m_vao(0),
 		m_vbos{ 0,0 },
@@ -98,5 +171,17 @@ namespace luna {
 
 	size_t Mesh::vertexCount() const {
 		return m_vertexCount;
+	}
+
+	Mesh Mesh::loadFromFile(const char* filepath) {
+		std::string fn(filepath);
+		std::string extension = fn.substr(fn.find_last_of('.') + 1);
+		
+		if (extension == "obj") {
+			return loadObj(filepath);
+		}
+
+		log("." + extension + " model files are not supported by Luna", luna::MessageSeverity::Warning);
+		return Mesh();
 	}
 }

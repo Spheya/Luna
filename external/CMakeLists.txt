@@ -6,6 +6,7 @@ set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
 add_subdirectory("glad")
 add_subdirectory("GLFW")
 add_subdirectory("glm")
+add_subdirectory("tiny_obj_loader")
 
 install(FILES GLFW/LICENSE.md DESTINATION include/GLFW)
 install(DIRECTORY GLFW/include DESTINATION .)

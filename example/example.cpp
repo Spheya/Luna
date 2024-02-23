@@ -11,23 +11,28 @@ int main() {
 	luna::Window window;
 	luna::Renderer renderer;
 
+	luna::Mesh bunny = luna::Mesh::loadFromFile("assets/bunny.obj");
+
 	luna::Camera camera(&window);
 	camera.setProjectionType(luna::ProjectionType::Perspective);
 
 	while (!luna::isCloseRequested() && !window.isCloseRequested()) {
 		luna::update();
-
 		camera.updateAspect();
 		renderer.beginFrame();
 
 		renderer.push(
-			luna::getPrimitive(luna::Primitive::Cube),
-			luna::Transform(glm::vec3(0.0f, 0.0f, -2.0f), glm::vec3(luna::getTime(), luna::getTime(), luna::getTime())).matrix()
+			&bunny,
+			luna::Transform(glm::vec3(-1.0f, 0.0f, -2.0f), glm::vec3(luna::getTime(), luna::getTime(), luna::getTime())).matrix()
+		);
+
+		renderer.push(
+			luna::getPrimitive(luna::Primitive::Teapot),
+			luna::Transform(glm::vec3(+1.0f, 0.0f, -2.0f), glm::vec3(luna::getTime(), luna::getTime(), luna::getTime())).matrix()
 		);
 
 		renderer.endFrame();
 		renderer.render(camera);
-
 		window.update();
 	}
 

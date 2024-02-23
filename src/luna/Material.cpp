@@ -2,9 +2,15 @@
 
 namespace luna {
 
+	Material::Material() {
+		setMainColor(Color::White);
+	}
+
 	Material::Material(Shader* shader) :
 		m_shader(shader)
-	{}
+	{
+		setMainColor(Color::White);
+	}
 
 	void Material::setShader(Shader* shader) {
 		m_shader = shader;
@@ -31,11 +37,11 @@ namespace luna {
 		}
 	}
 
-	void Material::setColor(Color color) {
+	void Material::setMainColor(Color color) {
 		setValue("MainColor", color);
 	}
 
-	void Material::setTexture(const Texture* value) {
+	void Material::setMainTexture(const Texture* value) {
 		setValue("MainTexture", value);
 	}
 

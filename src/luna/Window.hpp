@@ -31,6 +31,8 @@ namespace luna {
 		int getWidth() const override;
 		int getHeight() const override;
 
+		GLFWwindow* getInternalWindowPointer();
+
 	private:
 		bool m_isValid;
 
