@@ -15,6 +15,7 @@ int main() {
 
 	luna::Camera camera(&window);
 	camera.setProjectionType(luna::ProjectionType::Perspective);
+	camera.setBackgroundColor(luna::Color::Red);
 
 	while (!luna::isCloseRequested() && !window.isCloseRequested()) {
 		luna::update();

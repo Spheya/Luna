@@ -7,11 +7,18 @@
 
 namespace luna {
 
+	void onWindowSizeChange(GLFWwindow* window, int width, int height) {
+		Window* lunaWindow = (Window*)glfwGetWindowUserPointer(window);
+		lunaWindow->m_contents->setSize(width, height);
+	}
+
 	Window::Window(const char* title, glm::ivec2 size) :
 		m_isValid(false)
 	{
 		m_contents = std::make_unique<RenderTexture>(size.x, size.y);
 		m_windowHandle = glfwCreateWindow(size.x, size.y, title, nullptr, (GLFWwindow*)luna::getGraphicsContext());
+		glfwSetWindowUserPointer(m_windowHandle, this);
+		glfwSetWindowSizeCallback(m_windowHandle, onWindowSizeChange);
 
 		if (!m_windowHandle) {
 			log("An error occured while creating a window", MessageSeverity::Error);
@@ -57,6 +64,7 @@ namespace luna {
 		m_windowHandle(other.m_windowHandle),
 		m_blitQuad(std::move(other.m_blitQuad))
 	{
+		glfwSetWindowUserPointer(m_windowHandle, this);
 		other.m_windowHandle = nullptr;
 	}
 
@@ -68,6 +76,7 @@ namespace luna {
 		m_isValid = other.m_isValid;
 		m_windowHandle = other.m_windowHandle;
 		m_blitQuad = std::move(other.m_blitQuad);
+		glfwSetWindowUserPointer(m_windowHandle, this);
 
 		other.m_windowHandle = nullptr;
 
@@ -88,6 +97,7 @@ namespace luna {
 	void Window::update() {
 		glfwMakeContextCurrent(m_windowHandle);
 
+		glViewport(0, 0, getWidth(), getHeight());
 		glDrawElements(GL_TRIANGLES, GLsizei(m_blitQuad.vertexCount()), GL_UNSIGNED_INT, nullptr);
 		glfwSwapBuffers(m_windowHandle);
 

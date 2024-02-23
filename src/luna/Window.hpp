@@ -12,6 +12,7 @@ struct GLFWwindow;
 namespace luna {
 
 	class Window : public RenderTarget {
+		friend void onWindowSizeChange(GLFWwindow*, int, int);
 	public:
 		Window(const char* title = "Luna", glm::ivec2 size = glm::ivec2(960, 640));
 		Window(const char* title, int width, int height);
