@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 #include "Logger.hpp"
 #include "Context.hpp"
+#include "Input.hpp"
 
 namespace luna {
 
@@ -17,6 +18,7 @@ namespace luna {
 	{
 		m_contents = std::make_unique<RenderTexture>(size.x, size.y);
 		m_windowHandle = glfwCreateWindow(size.x, size.y, title, nullptr, (GLFWwindow*)luna::getGraphicsContext());
+		Input::addWindow(m_windowHandle);
 		glfwSetWindowUserPointer(m_windowHandle, this);
 		glfwSetWindowSizeCallback(m_windowHandle, onWindowSizeChange);
 
@@ -129,7 +131,7 @@ namespace luna {
 		return m_contents->getHeight();
 	}
 
-	GLFWwindow* Window::getInternalWindowPointer() {
+	GLFWwindow* Window::getInternalWindowPointer() const {
 		return m_windowHandle;
 	}
 }

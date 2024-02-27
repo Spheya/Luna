@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "Logger.hpp"
+#include "Input.hpp"
 
 namespace luna {
 
@@ -152,6 +153,7 @@ namespace luna {
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 		graphicsContext = glfwCreateWindow(1, 1, "Luna", nullptr, nullptr);
+		Input::addWindow(graphicsContext);
 		glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
 
 		if (!graphicsContext) {
@@ -202,7 +204,9 @@ namespace luna {
 	}
 
 	void update() {
+		Input::update();
 		glfwPollEvents(); // todo: do this on separate thread
+
 		double curTime = glfwGetTime();
 		deltatime = float(curTime - time);
 		time = curTime;

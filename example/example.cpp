@@ -9,18 +9,22 @@ int main() {
 	luna::initialize();
 
 	luna::Window window;
+	luna::Window window2;
 	luna::Renderer renderer;
 
 	luna::Mesh bunny = luna::Mesh::loadFromFile("assets/bunny.obj");
 
 	luna::Camera camera(&window);
 	camera.setProjectionType(luna::ProjectionType::Perspective);
-	camera.setBackgroundColor(luna::Color::Red);
+	camera.setBackgroundColor(luna::Color::Black);
 
 	while (!luna::isCloseRequested() && !window.isCloseRequested()) {
 		luna::update();
 		camera.updateAspect();
 		renderer.beginFrame();
+
+
+		luna::log(std::to_string(luna::Input::getMouseDelta().x) + ", " + std::to_string(luna::Input::getMouseDelta().y), luna::MessageSeverity::Info);
 
 		renderer.push(
 			&bunny,
