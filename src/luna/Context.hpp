@@ -28,7 +28,8 @@ namespace luna {
 	const Shader* getDefaultShader();
 	const Material* getDefaultMaterial();
 
-	void blit(Texture* source, RenderTarget* target);
+	void blit(const Texture* source, RenderTarget* target);
+	void blit(const Texture* source, RenderTarget* target, const Material* material);
 
 	bool isCloseRequested();
 

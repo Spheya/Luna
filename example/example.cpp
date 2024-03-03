@@ -9,7 +9,6 @@ int main() {
 	luna::initialize();
 
 	luna::Window window;
-	luna::Window window2;
 	luna::Renderer renderer;
 
 	luna::Mesh bunny = luna::Mesh::loadFromFile("assets/bunny.obj");
@@ -22,9 +21,6 @@ int main() {
 		luna::update();
 		camera.updateAspect();
 		renderer.beginFrame();
-
-
-		luna::log(std::to_string(luna::Input::getMouseDelta().x) + ", " + std::to_string(luna::Input::getMouseDelta().y), luna::MessageSeverity::Info);
 
 		renderer.push(
 			&bunny,

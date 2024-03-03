@@ -90,7 +90,7 @@ namespace luna {
 		void loadShaders() {
 			defaultShader = std::make_unique<Shader>(
 				"\
-				#version 330 core\n\
+				#version 430 core\n\
 				\n\
 				layout(location = 0) in vec3 Position;\n\
 				layout(location = 1) in vec2 UV;\n\
@@ -114,7 +114,7 @@ namespace luna {
 				}\n",
 
 				"\
-				#version 330 core\n\
+				#version 430 core\n\
 				\n\
 				in vec4 vertexColor;\n\
 				in vec2 uv;\n\
@@ -133,8 +133,8 @@ namespace luna {
 			defaultMaterial->setMainTexture(defaultTexture.get());
 
 			blitShader = std::make_unique<ShaderProgram>(
-				"#version 330 core\nin vec3 Position;in vec2 UV;out vec2 i;void main(){gl_Position=vec4(Position,1);i=UV;}",
-				"#version 330 core\nin vec2 i;uniform sampler2D t;out vec4 v;void main(){v=texture(t,i);}"
+				"#version 430 core\nin vec3 Position;in vec2 UV;out vec2 i;void main(){gl_Position=vec4(Position,1);i=UV;}",
+				"#version 430 core\nin vec2 i;uniform sampler2D t;out vec4 v;void main(){v=texture(t,i);}"
 			);
 			blitShader->uniform(blitShader->uniformId("t"), 0);
 		}
@@ -149,7 +149,7 @@ namespace luna {
 		log("Initialized GLFW", MessageSeverity::Info);
 
 		// glfw doesnt support contexts without a window, this is why we create a 1x1 invisible window
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 		graphicsContext = glfwCreateWindow(1, 1, "Luna", nullptr, nullptr);
@@ -232,10 +232,18 @@ namespace luna {
 		return defaultMaterial.get();
 	}
 
-	void blit(Texture* source, RenderTarget* target) {
+	void blit(const Texture* source, RenderTarget* target) {
 		target->makeActiveTarget();
 		source->bind(0);
 		blitShader->bind();
+		blitQuad->bind();
+		glDrawElements(GL_TRIANGLES, GLsizei(blitQuad->vertexCount()), GL_UNSIGNED_INT, nullptr);
+	}
+
+	void blit(const Texture* source, RenderTarget* target, const Material* material) {
+		target->makeActiveTarget();
+		source->bind(0);
+		material->bind();
 		blitQuad->bind();
 		glDrawElements(GL_TRIANGLES, GLsizei(blitQuad->vertexCount()), GL_UNSIGNED_INT, nullptr);
 	}
