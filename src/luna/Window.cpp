@@ -42,8 +42,8 @@ namespace luna {
 		m_blitQuad.setIndices(indices, 6);
 
 		m_blitShader.load(
-			"#version 330 core\nin vec3 Position;in vec2 UV;out vec2 i;void main(){gl_Position=vec4(Position,1);i=UV;}",
-			"#version 330 core\nin vec2 i;uniform sampler2D t;out vec4 v;void main(){v=texture(t,i);}"
+			"#version 430 core\nin vec3 Position;in vec2 UV;out vec2 i;void main(){gl_Position=vec4(Position,1);i=UV;}",
+			"#version 430 core\nin vec2 i;uniform sampler2D t;out vec4 v;void main(){v=texture(t,i);}"
 		);
 		m_blitShader.uniform(m_blitShader.uniformId("t"), 0);
 
