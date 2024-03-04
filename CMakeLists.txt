@@ -7,6 +7,7 @@ if (POLICY CMP0141)
 endif()
 
 project ("luna")
+option(LUNA_BUILD_EXAMPLE "Build the Luna example program" OFF)
 
 add_subdirectory ("external")
 
@@ -21,4 +22,6 @@ install(TARGETS luna DESTINATION lib)
 install(FILES LICENSE DESTINATION .)
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/ DESTINATION include FILES_MATCHING PATTERN "*.hpp")
 
-add_subdirectory ("example")
+if(LUNA_BUILD_EXAMPLE)
+	add_subdirectory ("example")
+endif(LUNA_BUILD_EXAMPLE)
