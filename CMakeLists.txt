@@ -7,7 +7,7 @@ if (POLICY CMP0141)
 endif()
 
 project ("luna")
-option(LUNA_BUILD_EXAMPLE "Build the Luna example program" OFF)
+option(LUNA_BUILD_EXAMPLE "Build the Luna example program" ON)
 
 add_subdirectory ("external")
 
