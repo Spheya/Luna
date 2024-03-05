@@ -234,17 +234,19 @@ namespace luna {
 
 	void blit(const Texture* source, RenderTarget* target) {
 		target->makeActiveTarget();
-		source->bind(0);
 		blitShader->bind();
 		blitQuad->bind();
+		source->bind(0);
 		glDrawElements(GL_TRIANGLES, GLsizei(blitQuad->vertexCount()), GL_UNSIGNED_INT, nullptr);
 	}
 
 	void blit(const Texture* source, RenderTarget* target, const Material* material) {
 		target->makeActiveTarget();
-		source->bind(0);
 		material->bind();
 		blitQuad->bind();
+		source->bind(0);
+		auto& program = material->getShader()->getProgram();
+		program.uniform(program.uniformId("MainTexture"), 0);
 		glDrawElements(GL_TRIANGLES, GLsizei(blitQuad->vertexCount()), GL_UNSIGNED_INT, nullptr);
 	}
 }
