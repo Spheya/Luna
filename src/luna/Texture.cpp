@@ -6,36 +6,54 @@
 
 namespace luna {
 
-	Texture::Texture(std::uint8_t* data, int width, int height) :
+	Texture::Texture(TextureFormat format) :
+		m_format(format)
+	{}
+
+	Texture::Texture(const std::uint8_t* data, int width, int height, TextureFormat format) :
+		m_format(format),
 		m_dimensions(width, height)
 	{
 		setTextureData(data);
 	}
 
-	Texture::Texture(std::uint8_t* data, glm::ivec2 size) :
-		Texture(data, size.x, size.y)
+	Texture::Texture(const std::uint8_t* data, glm::ivec2 size, TextureFormat format) :
+		Texture(data, size.x, size.y, format)
 	{}
 
-	Texture::Texture(Color* data, int width, int height) :
+	Texture::Texture(const Color* data, int width, int height, TextureFormat format) :
+		m_format(format),
 		m_dimensions(width, height)
 	{
 		setTextureData(data);
 	}
 
-	Texture::Texture(Color* data, glm::ivec2 size) :
-		Texture(data, size.x, size.y) {
+	Texture::Texture(const Color* data, glm::ivec2 size, TextureFormat format) :
+		Texture(data, size.x, size.y, format) {
 	}
 
-	Texture::Texture(Color color) :
-		Texture(&color, 1, 1)
+	Texture::Texture(const float* data, int width, int height, TextureFormat format) :
+		m_format(format),
+		m_dimensions(width, height) {
+		setTextureData(data);
+	}
+
+	Texture::Texture(const float* data, glm::ivec2 size, TextureFormat format) :
+		Texture(data, size.x, size.y, format) {
+	}
+
+	Texture::Texture(Color color, TextureFormat format) :
+		Texture(&color, 1, 1, format)
 	{}
 
-	Texture::Texture(int width, int height) {
+	Texture::Texture(int width, int height, TextureFormat format) :
+		m_format(format)
+	{
 		setSize(width, height);
 	}
 
-	Texture::Texture(glm::ivec2 size) : 
-		Texture(size.x, size.y)
+	Texture::Texture(glm::ivec2 size, TextureFormat format) :
+		Texture(size.x, size.y, format)
 	{}
 
 	Texture::Texture(Texture&& other) noexcept :
@@ -69,12 +87,16 @@ namespace luna {
 			glDeleteTextures(1, &m_texture);
 	}
 
-	void Texture::setTextureData(std::uint8_t* data) {
-		setTextureData(data, m_dimensions.x, m_dimensions.y);
-	}
+	void Texture::setTextureDataInternal(void* data, int width, int height, int format, int type) {
+		GLenum internalFormat = GL_RGBA8;
+		switch (m_format) {
+			case TextureFormat::Rgb: internalFormat = GL_RGB8; break;
+			case TextureFormat::Rgba: internalFormat = GL_RGBA8; break;
+			case TextureFormat::Float: internalFormat = GL_R16F; break;
+			case TextureFormat::FloatRgba: internalFormat = GL_RGBA16F; break;
+		}
 
-	void Texture::setTextureData(std::uint8_t* data, int width, int height) {
-		if (m_texture == 0) {
+		if(m_texture == 0) {
 			if (width < 1 || height < 1) {
 				log("Trying to use a texture with a size smaller than 1x1", MessageSeverity::Error);
 				return;
@@ -83,24 +105,49 @@ namespace luna {
 			glGenTextures(1, &m_texture);
 			bind();
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, m_horizontalWrap == TextureWrapMode::Repeat ? GL_REPEAT : GL_CLAMP);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, m_verticalWrap   == TextureWrapMode::Repeat ? GL_REPEAT : GL_CLAMP);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, m_verticalWrap == TextureWrapMode::Repeat ? GL_REPEAT : GL_CLAMP);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_minFilter == TextureFilter::Nearest ? GL_NEAREST : GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_magFilter == TextureFilter::Nearest ? GL_NEAREST : GL_LINEAR);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+			glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, type, data);
 		} else {
 			bind();
 			if (m_dimensions == glm::ivec2(width, height)) {
-				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
+				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, format, type, data);
 			} else {
+				if (width < 1 || height < 1) {
+					log("Trying to use a texture with a size smaller than 1x1", MessageSeverity::Error);
+					return;
+				}
+
 				onSizeChange(width, height);
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+				glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, type, data);
 			}
 		}
 
 		m_dimensions = glm::ivec2(width, height);
 	}
 
-	void Texture::setTextureData(std::uint8_t* data, glm::ivec2 size) {
+	void Texture::setTextureData(const std::uint8_t* data) {
+		setTextureData(data, m_dimensions.x, m_dimensions.y);
+	}
+
+	void Texture::setTextureData(const std::uint8_t* data, int width, int height) {
+		setTextureDataInternal((void*)data, width, height, GL_RGBA, GL_UNSIGNED_BYTE);
+	}
+
+	void Texture::setTextureData(const std::uint8_t* data, glm::ivec2 size) {
+		setTextureData(data, size.x, size.y);
+	}
+
+	void Texture::setTextureData(const float* data) {
+		setTextureData(data, m_dimensions.x, m_dimensions.y);
+	}
+
+	void Texture::setTextureData(const float* data, int width, int height) {
+		setTextureDataInternal((void*)data, width, height, GL_R, GL_FLOAT);
+	}
+
+	void Texture::setTextureData(const float* data, glm::ivec2 size) {
 		setTextureData(data, size.x, size.y);
 	}
 
@@ -108,34 +155,15 @@ namespace luna {
 		setTextureData(&data, 1, 1);
 	}
 
-	void Texture::setTextureData(Color* data) {
+	void Texture::setTextureData(const Color* data) {
 		setTextureData(data, m_dimensions.x, m_dimensions.y);
 	}
 
-	void Texture::setTextureData(Color* data, int width, int height) {
-		if (width < 1 || height < 1) {
-			log("Trying to use a texture with a size smaller than 1x1", MessageSeverity::Error);
-			return;
-		}
-
-		std::uint8_t* buffer = new std::uint8_t[width * height * 4];
-
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				auto pixel = data[x + y * width].rgba();
-				buffer[4 * (x + y * width) + 0] = pixel.r;
-				buffer[4 * (x + y * width) + 1] = pixel.g;
-				buffer[4 * (x + y * width) + 2] = pixel.b;
-				buffer[4 * (x + y * width) + 3] = pixel.a;
-			}
-		}
-
-		setTextureData(buffer, width, height);
-
-		delete[] buffer;
+	void Texture::setTextureData(const Color* data, int width, int height) {
+		setTextureDataInternal((void*)data, width, height, GL_RGBA, GL_FLOAT);
 	}
 
-	void Texture::setTextureData(Color* data, glm::ivec2 size) {
+	void Texture::setTextureData(const Color* data, glm::ivec2 size) {
 		setTextureData(data, size.x, size.y);
 	}
 

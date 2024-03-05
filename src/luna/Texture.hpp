@@ -4,6 +4,10 @@
 #include "Color.hpp"
 
 namespace luna {
+	enum class TextureFormat {
+		Rgb, Rgba, Float, FloatRgba
+	};
+
 	enum class TextureFilter {
 		Nearest, Linear
 	};
@@ -14,28 +18,34 @@ namespace luna {
 
 	class Texture {
 	public:
-		Texture() = default;
-		Texture(std::uint8_t* data, int width, int height);
-		Texture(std::uint8_t* data, glm::ivec2 size);
-		Texture(Color* data, int width, int height);
-		Texture(Color* data, glm::ivec2 size);
-		Texture(Color color);
-		Texture(int width, int height);
-		Texture(glm::ivec2 size);
+		explicit Texture(TextureFormat format = TextureFormat::Rgba);
+		Texture(const std::uint8_t* data, int width, int height, TextureFormat format = TextureFormat::Rgba);
+		Texture(const std::uint8_t* data, glm::ivec2 size, TextureFormat format = TextureFormat::Rgba);
+		Texture(const Color* data, int width, int height, TextureFormat format = TextureFormat::Rgba);
+		Texture(const Color* data, glm::ivec2 size, TextureFormat format = TextureFormat::Rgba);
+		Texture(const float* data, int width, int height, TextureFormat format = TextureFormat::Rgba);
+		Texture(const float* data, glm::ivec2 size, TextureFormat format = TextureFormat::Rgba);
+		Texture(Color color, TextureFormat format = TextureFormat::Rgba);
+		Texture(int width, int height, TextureFormat format = TextureFormat::Rgba);
+		Texture(glm::ivec2 size, TextureFormat format = TextureFormat::Rgba);
 		Texture(Texture&) = delete;
 		Texture& operator=(Texture&) = delete;
 		Texture(Texture&& other) noexcept;
 		Texture& operator=(Texture&& other) noexcept;
 		virtual ~Texture();
 
-		void setTextureData(std::uint8_t* data);
-		void setTextureData(std::uint8_t* data, int width, int height);
-		void setTextureData(std::uint8_t* data, glm::ivec2 size);
+		void setTextureData(const std::uint8_t* data);
+		void setTextureData(const std::uint8_t* data, int width, int height);
+		void setTextureData(const std::uint8_t* data, glm::ivec2 size);
+
+		void setTextureData(const float* data);
+		void setTextureData(const float* data, int width, int height);
+		void setTextureData(const float* data, glm::ivec2 size);
 
 		void setTextureData(Color data);
-		void setTextureData(Color* data);
-		void setTextureData(Color* data, int width, int height);
-		void setTextureData(Color* data, glm::ivec2 size);
+		void setTextureData(const Color* data);
+		void setTextureData(const Color* data, int width, int height);
+		void setTextureData(const Color* data, glm::ivec2 size);
 
 		void setFilter(TextureFilter filter);
 		void setMinFilter(TextureFilter filter);
@@ -58,6 +68,8 @@ namespace luna {
 		void bind(int textureSlot) const;
 
 	protected:
+		void setTextureDataInternal(void* data, int width, int height, int format, int type);
+
 		unsigned int getTextureHandle() const;
 		virtual void onSizeChange(int width, int height) {};
 
@@ -68,6 +80,7 @@ namespace luna {
 
 		glm::ivec2 m_dimensions = glm::ivec2(0);
 
+		TextureFormat m_format = TextureFormat::Rgba;
 		TextureFilter m_minFilter = TextureFilter::Linear;
 		TextureFilter m_magFilter = TextureFilter::Nearest;
 		TextureWrapMode m_horizontalWrap = TextureWrapMode::Clamp;

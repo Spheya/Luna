@@ -6,8 +6,8 @@
 
 namespace luna {
 
-	RenderTexture::RenderTexture(int width, int height) :
-		Texture(width, height)
+	RenderTexture::RenderTexture(int width, int height, TextureFormat format) :
+		Texture(width, height, format)
 	{
 		glGenFramebuffers(1, &m_fbo);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
@@ -20,8 +20,8 @@ namespace luna {
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_rbo);
 	}
 
-	RenderTexture::RenderTexture(glm::ivec2 size) :
-		RenderTexture(size.x, size.y)
+	RenderTexture::RenderTexture(glm::ivec2 size, TextureFormat format) :
+		RenderTexture(size.x, size.y, format)
 	{}
 
 	RenderTexture::RenderTexture(RenderTexture&& other) noexcept :
