@@ -1,5 +1,7 @@
 #include "Texture.hpp"
 
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb/stb_image.h>
 #include <glad/glad.h>
 
 #include "Logger.hpp"
@@ -280,4 +282,17 @@ namespace luna {
 		glBindTexture(GL_TEXTURE_2D, m_texture);
 	}
 
+	Texture Texture::loadFromFile(const char* filepath) {
+		int width, height, nrChannels;
+		std::uint8_t* data = stbi_load(filepath, &width, &height, &nrChannels, 0);
+
+		if (nrChannels == 3) {
+			return Texture(data, width, height, TextureFormat::Rgb);
+		}else if (nrChannels == 4) {
+			return Texture(data, width, height, TextureFormat::Rgba);
+		}
+
+		log("Luna only supports textures with 3 or 4 colour channels!", MessageSeverity::Error);
+		return Texture();
+	}
 }

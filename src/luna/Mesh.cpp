@@ -181,7 +181,7 @@ namespace luna {
 			return loadObj(filepath);
 		}
 
-		log("." + extension + " model files are not supported by Luna", luna::MessageSeverity::Warning);
+		log("." + extension + " model files are not supported by Luna", luna::MessageSeverity::Error);
 		return Mesh();
 	}
 }

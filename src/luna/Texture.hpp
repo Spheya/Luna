@@ -67,6 +67,8 @@ namespace luna {
 
 		void bind(int textureSlot) const;
 
+		static Texture loadFromFile(const char* filepath);
+
 	protected:
 		void setTextureDataInternal(void* data, int width, int height, int format, int type);
 

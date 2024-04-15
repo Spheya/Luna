@@ -11,12 +11,12 @@ option(LUNA_BUILD_EXAMPLE "Build the Luna example program" ON)
 
 add_subdirectory ("external")
 
-add_library (luna "src/luna/Window.cpp" "src/luna/Camera.cpp" "src/luna/Mesh.cpp" "src/luna/Renderer.cpp" "src/luna/Color.cpp" "src/luna/ShaderProgram.cpp" "src/luna/Logger.cpp" "src/luna/Shader.cpp" "src/luna/Context.cpp" "src/luna/RenderTarget.cpp" "src/luna/Material.cpp" "src/luna/Texture.cpp" "src/luna/RenderTexture.cpp" "src/luna/Input.cpp")
+add_library (luna "src/luna/Window.cpp" "src/luna/Camera.cpp" "src/luna/Mesh.cpp" "src/luna/Renderer.cpp" "src/luna/Color.cpp" "src/luna/ShaderProgram.cpp" "src/luna/Logger.cpp" "src/luna/Shader.cpp" "src/luna/Context.cpp" "src/luna/RenderTarget.cpp" "src/luna/Material.cpp" "src/luna/Texture.cpp" "src/luna/RenderTexture.cpp" "src/luna/Input.cpp" "external/stb/stb/stb_image.h")
 set_property(TARGET luna PROPERTY CXX_STANDARD 20)
 
 target_include_directories(luna PUBLIC "src")
 
-target_link_libraries(luna PUBLIC glm glfw glad tiny_obj_loader)
+target_link_libraries(luna PUBLIC glm glfw glad stb tiny_obj_loader)
 
 install(TARGETS luna DESTINATION lib)
 install(FILES LICENSE DESTINATION .)
