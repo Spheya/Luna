@@ -2,40 +2,41 @@
 #include <luna.hpp>
 
 int main() {
-	luna::setMessageCallback([](const char* message, const char* prefix, luna::MessageSeverity severity) {
-		std::cout << '<' << prefix << "> " << message << std::endl;
-	});
+    luna::setMessageCallback([](const char* message, const char* prefix, luna::MessageSeverity severity) {
+        std::cout << '<' << prefix << "> " << message << std::endl;
+        });
 
-	luna::initialize();
+    luna::initialize();
 
-	luna::Window window;
-	luna::Renderer renderer;
+    luna::Window window;
+    luna::Renderer renderer;
 
-	luna::Mesh bunny = luna::Mesh::loadFromFile("assets/bunny.obj");
+    luna::Camera camera(&window);
+    camera.setProjectionType(luna::ProjectionType::Perspective);
+    camera.setBackgroundColor(luna::Color::Black);
 
-	luna::Camera camera(&window);
-	camera.setProjectionType(luna::ProjectionType::Perspective);
-	camera.setBackgroundColor(luna::Color::Black);
+    luna::Material material(luna::getDefaultShader());
+    luna::Texture texture = luna::Texture::loadFromFile("assets/Blobby.png");
 
-	while (!luna::isCloseRequested() && !window.isCloseRequested()) {
-		luna::update();
-		camera.updateAspect();
-		renderer.beginFrame();
+    material.setMainTexture(&texture);
 
-		renderer.push(
-			&bunny,
-			luna::Transform(glm::vec3(-1.0f, 0.0f, -2.0f), glm::vec3(luna::getTime(), luna::getTime(), luna::getTime())).matrix()
-		);
+    while (!luna::isCloseRequested() && !window.isCloseRequested()) {
+        luna::update();
+        camera.updateAspect();
+        renderer.beginFrame();
 
-		renderer.push(
-			luna::getPrimitive(luna::Primitive::Teapot),
-			luna::Transform(glm::vec3(+1.0f, 0.0f, -2.0f), glm::vec3(luna::getTime(), luna::getTime(), luna::getTime())).matrix()
-		);
+        glm::vec3 textureScale(texture.getWidth() / 16.0f, texture.getHeight() / 16.0f, 1.0f);
 
-		renderer.endFrame();
-		renderer.render(camera);
-		window.update();
-	}
+        renderer.push(
+            luna::getPrimitive(luna::Primitive::Quad),
+            luna::Transform(glm::vec3(0.0f), glm::vec3(0.0f), textureScale).matrix(),
+            &material
+        );
 
-	luna::terminate();
+        renderer.endFrame();
+        renderer.render(camera);
+        window.update();
+    }
+
+    luna::terminate();
 }
