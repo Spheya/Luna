@@ -127,6 +127,7 @@ namespace luna {
 				\n\
 				void main() {\n\
 					fragColor = texture(MainTexture, uv) * vertexColor * pow(max(dot(normalize(normal), normalize(vec3(1.0, 1.0, 1.0))), 0.0) * 0.6 + (normal.y * 0.5 + 0.5) * 0.38 + 0.02, 1.0 / 2.2);\n\
+					if(fragColor.a == 0.0) discard;\n\
 				}\n"
 			);
 			defaultTexture = std::make_unique<Texture>(Color::White);

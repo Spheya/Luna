@@ -4,7 +4,7 @@
 int main() {
     luna::setMessageCallback([](const char* message, const char* prefix, luna::MessageSeverity severity) {
         std::cout << '<' << prefix << "> " << message << std::endl;
-        });
+    });
 
     luna::initialize();
 
@@ -13,7 +13,7 @@ int main() {
 
     luna::Camera camera(&window);
     camera.setProjectionType(luna::ProjectionType::Perspective);
-    camera.setBackgroundColor(luna::Color::Black);
+    camera.setBackgroundColor(luna::Color::White);
 
     luna::Material material(luna::getDefaultShader());
     luna::Texture texture = luna::Texture::loadFromFile("assets/Blobby.png");
