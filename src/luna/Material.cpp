@@ -4,12 +4,14 @@ namespace luna {
 
 	Material::Material() {
 		setMainColor(Color::White);
+		setMainTextureScaleTranslation(glm::vec4(1.0f, 1.0f, 0.0f, 0.0f));
 	}
 
 	Material::Material(Shader* shader) :
 		m_shader(shader)
 	{
 		setMainColor(Color::White);
+		setMainTextureScaleTranslation(glm::vec4(1.0f, 1.0f, 0.0f, 0.0f));
 	}
 
 	void Material::setShader(Shader* shader) {
@@ -45,6 +47,10 @@ namespace luna {
 		setValue("MainTexture", value);
 	}
 
+	void Material::setMainTextureScaleTranslation(const glm::vec4 value) {
+		setValue("MainTexture_ST", value);
+	}
+
 	void Material::setValue(const char* name, float value) {
 		setParam(m_floatParams, name, value);
 	}
@@ -65,11 +71,11 @@ namespace luna {
 		setParam(m_vec4Params, name, value);
 	}
 
-	void Material::setValue(const char* name, glm::mat3 value) {
+	void Material::setValue(const char* name, glm::mat3& value) {
 		setParam(m_mat3Params, name, value);
 	}
 
-	void Material::setValue(const char* name, glm::mat4 value) {
+	void Material::setValue(const char* name, glm::mat4& value) {
 		setParam(m_mat4Params, name, value);
 	}
 

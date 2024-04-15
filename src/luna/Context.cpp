@@ -101,6 +101,7 @@ namespace luna {
 				out vec3 normal;\n\
 				\n\
 				uniform vec4 MainColor;\n\
+				uniform vec4 MainTexture_ST\n\
 				\n\
 				uniform mat4 ProjectionMatrix;\n\
 				uniform mat4 ViewMatrix;\n\
@@ -109,7 +110,7 @@ namespace luna {
 				void main() {\n\
 					gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(Position, 1.0);\n\
 					vertexColor = MainColor;\n\
-					uv = UV;\n\
+					uv = UV * MainTexture_ST.xy + MainTexture_ST.zw;\n\
 					normal = mat3(ModelMatrix) * Normal;\n\
 				}\n",
 
