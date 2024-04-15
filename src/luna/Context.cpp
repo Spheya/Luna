@@ -101,7 +101,7 @@ namespace luna {
 				out vec3 normal;\n\
 				\n\
 				uniform vec4 MainColor;\n\
-				uniform vec4 MainTexture_ST\n\
+				uniform vec4 MainTexture_ST;\n\
 				\n\
 				uniform mat4 ProjectionMatrix;\n\
 				uniform mat4 ViewMatrix;\n\
