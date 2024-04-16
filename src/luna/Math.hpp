@@ -9,6 +9,7 @@
 #include <glm/gtx/quaternion.hpp>
 
 namespace luna {
+	using namespace glm;
 
 	constexpr float Pi          = 3.14159265359f;
 	constexpr float Tau         = 6.28318530718f;
