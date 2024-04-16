@@ -327,6 +327,7 @@ namespace luna {
 			result = Texture(data, width, height, TextureFormat::Rgba);
 		} else {
 			log("Luna only supports textures with 3 or 4 colour channels!", MessageSeverity::Error);
+			result = Texture(Color::Magenta);
 		}
 
 		stbi_image_free(data);
