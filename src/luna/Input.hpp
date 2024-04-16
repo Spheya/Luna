@@ -153,7 +153,7 @@ namespace luna {
 		friend void initialize();
 
 	public:
-		static void setMouseMoveCallback(std::function<void(glm::vec2 delta)> callback);
+		static void setMouseMoveCallback(std::function<void(glm::vec2 position, glm::vec2 delta)> callback);
 		static void setMouseButtonCallback(std::function<void(MouseButton button, bool pressed)> callback);
 		static void setKeyCallback(std::function<void(Key key, bool pressed)> callback);
 		static void setCharCallback(std::function<void(unsigned int codepoint)> callback);

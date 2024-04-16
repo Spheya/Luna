@@ -30,6 +30,10 @@ namespace luna {
 		glm::vec3 rotation; // TODO: quaternions
 		glm::vec3 scale;
 
+		glm::mat3 rotationMatrix() const {
+			return glm::toMat3(glm::quat(rotation));
+		}
+
 		glm::mat4 matrix() const {
 			return glm::translate(glm::mat4(1.0f), position)
 				 * glm::toMat4(glm::quat(rotation))

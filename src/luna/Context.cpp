@@ -163,6 +163,9 @@ namespace luna {
 			return;
 		}
 
+		if (glfwRawMouseMotionSupported())
+			glfwSetInputMode(graphicsContext, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+
 		// load opengl functions
 		glfwMakeContextCurrent(graphicsContext);
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {

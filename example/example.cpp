@@ -12,7 +12,7 @@ int main() {
     luna::Renderer renderer;
 
     luna::Camera camera(&window);
-    camera.setProjectionType(luna::ProjectionType::Orthographic);
+    camera.setProjectionType(luna::ProjectionType::Perspective);
     camera.setBackgroundColor(luna::Color::White);
 
     luna::Material material(luna::getDefaultShader());
@@ -27,6 +27,11 @@ int main() {
         luna::update();
         camera.updateAspect();
         renderer.beginFrame();
+
+        bool debugCamera = luna::Input::isMouseButtonDown(luna::MouseButton::Right);
+        window.lockCursor(debugCamera);
+        if(debugCamera)
+            luna::updateDebugCamera(camera);
 
         glm::vec3 textureScale(texture.getWidth() / 16.0f, texture.getHeight() / 16.0f, 1.0f);
 

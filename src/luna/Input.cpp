@@ -3,12 +3,14 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <iostream>
+
 #include "Window.hpp"
 #include "Logger.hpp"
 
 namespace luna {
 	namespace {
-		std::function<void(glm::vec2 delta)> mouseMoveCallback;
+		std::function<void(glm::vec2 position, glm::vec2 delta)> mouseMoveCallback;
 		std::function<void(MouseButton button, bool pressed)> mouseButtonCallback;
 		std::function<void(Key key, bool pressed)> keyCallback;
 		std::function<void(unsigned int codepoint)> charCallback;
@@ -23,14 +25,21 @@ namespace luna {
 		glm::vec2 mouseDelta = glm::vec2(0.0f);
 
 		void cursorPositionCallbackGlfw(GLFWwindow* window, double xpos, double ypos) {
+			static bool firstMouseInput = true;
+
 			int windowX, windowY;
 			glfwGetWindowPos(window, &windowX, &windowY);
 			glm::vec2 newMousePos(xpos - windowX, ypos - windowY);
-			mouseDelta = mousePos - newMousePos;
+			mouseDelta += mousePos - newMousePos;
 			mousePos = newMousePos;
 
+			if (firstMouseInput) {
+				firstMouseInput = false;
+				mouseDelta = glm::vec2(0.0f);
+			}
+
 			if (mouseMoveCallback)
-				mouseMoveCallback(mouseDelta);
+				mouseMoveCallback(mousePos, mouseDelta);
 		}
 
 		void mouseButtonCallbackGlfw(GLFWwindow* window, int button, int action, int mods) {
@@ -71,7 +80,7 @@ namespace luna {
 		}
 	}
 
-	void Input::setMouseMoveCallback(std::function<void(glm::vec2 delta)> callback) {
+	void Input::setMouseMoveCallback(std::function<void(glm::vec2 position, glm::vec2 delta)> callback) {
 		mouseMoveCallback = callback;
 	}
 

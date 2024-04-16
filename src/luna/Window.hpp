@@ -27,6 +27,8 @@ namespace luna {
 		bool isCloseRequested() const;
 		void close();
 
+		void lockCursor(bool lock = true);
+
 		void makeActiveTarget() override;
 		glm::ivec2 getSize() const override;
 		int getWidth() const override;

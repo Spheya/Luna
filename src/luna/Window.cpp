@@ -27,6 +27,9 @@ namespace luna {
 			return;
 		}
 
+		if (glfwRawMouseMotionSupported())
+			glfwSetInputMode(m_windowHandle, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+
 		glfwMakeContextCurrent(m_windowHandle);
 
 		Vertex vertices[] = {
@@ -113,6 +116,10 @@ namespace luna {
 	void Window::close() {
 		glfwDestroyWindow(m_windowHandle);
 		log("Window closed", MessageSeverity::Info);
+	}
+
+	void Window::lockCursor(bool lock) {
+		glfwSetInputMode(m_windowHandle, GLFW_CURSOR, lock ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
 	}
 
 	void Window::makeActiveTarget() {
