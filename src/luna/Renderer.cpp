@@ -1,6 +1,7 @@
 #include "Renderer.hpp"
 
 #include <glad/glad.h>
+#include <algorithm>
 
 #include "Context.hpp"
 
@@ -11,7 +12,6 @@ namespace luna {
 	}
 
 	void Renderer::endFrame() {
-		// TODO : possibly do some optimization, like grouping draw commands together
 	}
 
 	void Renderer::push(const Mesh* mesh, glm::mat4 matrix, const Material* material) {
@@ -23,11 +23,17 @@ namespace luna {
 	}
 
 	void Renderer::render(const Camera& camera) const {
+		std::vector<RenderObject> renderBatch = m_renderObjects;
+
+		std::sort(renderBatch.begin(), renderBatch.end(), [&](const RenderObject& a, const RenderObject& b) {
+			return glm::dot(glm::vec3(a.matrix[3]), camera.getTransform().position) < glm::dot(glm::vec3(b.matrix[3]), camera.getTransform().position);
+		});
+
 		if (camera.getTarget()) {
 			camera.getTarget()->makeActiveTarget();
 			RenderTarget::clear(camera.getBackgroundColor());
 
-			for (const auto& object : m_renderObjects) {
+			for (const auto& object : renderBatch) {
 				object.mesh->bind();
 				object.material->bind();
 				auto& shader = object.material->getShader()->getProgram();

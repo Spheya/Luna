@@ -26,10 +26,15 @@ namespace luna {
 			const Material* material;
 		};
 
+		struct RenderBatch {
+			const RenderObject* start;
+			int size;
+			glm::vec3 nearest;
+		};
+
 		void draw(const Mesh* mesh) const;
 
 		std::vector<RenderObject> m_renderObjects;
-
 	};
 
 }

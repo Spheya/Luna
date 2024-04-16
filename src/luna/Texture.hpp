@@ -16,6 +16,10 @@ namespace luna {
 		Repeat, Clamp
 	};
 
+	enum class TextureType {
+		Solid, Cutout, Transparent
+	};
+
 	class Texture {
 	public:
 		explicit Texture(TextureFormat format = TextureFormat::Rgba);
@@ -46,6 +50,9 @@ namespace luna {
 		void setTextureData(const Color* data);
 		void setTextureData(const Color* data, int width, int height);
 		void setTextureData(const Color* data, glm::ivec2 size);
+
+		void setTextureType(TextureType type);
+		TextureType getTextureType() const;
 
 		void setFilter(TextureFilter filter);
 		void setMinFilter(TextureFilter filter);
@@ -87,6 +94,7 @@ namespace luna {
 		TextureFilter m_magFilter = TextureFilter::Nearest;
 		TextureWrapMode m_horizontalWrap = TextureWrapMode::Clamp;
 		TextureWrapMode m_verticalWrap = TextureWrapMode::Clamp;
+		TextureType m_textureType = TextureType::Solid;
 	};
 
 }

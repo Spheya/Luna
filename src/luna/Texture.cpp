@@ -134,6 +134,18 @@ namespace luna {
 	}
 
 	void Texture::setTextureData(const std::uint8_t* data, int width, int height) {
+		if (data) {
+			m_textureType = TextureType::Solid;
+			for (int y = 0; y < height; ++y) {
+				for (int x = 0; x < width; ++x) {
+					std::uint8_t alpha = data[(x + y * width) * 4 + 3];
+					if (m_textureType == TextureType::Solid && alpha == 0) m_textureType = TextureType::Cutout;
+					else if (alpha != 255 && alpha != 0) { m_textureType = TextureType::Transparent; break; }
+				}
+				if (m_textureType == TextureType::Transparent) break;
+			}
+		}
+
 		setTextureDataInternal((void*)data, width, height, GL_RGBA, GL_UNSIGNED_BYTE);
 	}
 
@@ -146,6 +158,7 @@ namespace luna {
 	}
 
 	void Texture::setTextureData(const float* data, int width, int height) {
+		m_textureType = TextureType::Solid;
 		setTextureDataInternal((void*)data, width, height, GL_R, GL_FLOAT);
 	}
 
@@ -162,11 +175,31 @@ namespace luna {
 	}
 
 	void Texture::setTextureData(const Color* data, int width, int height) {
+		if (data) {
+			m_textureType = TextureType::Solid;
+			for (int y = 0; y < height; ++y) {
+				for (int x = 0; x < width; ++x) {
+					float alpha = data[x + y * width].a;
+					if (m_textureType == TextureType::Solid && alpha == 0.0f) m_textureType = TextureType::Cutout;
+					else if (alpha != 1.0f && alpha != 0.0f) { m_textureType = TextureType::Transparent; break; }
+				}
+				if (m_textureType == TextureType::Transparent) break;
+			}
+		}
+
 		setTextureDataInternal((void*)data, width, height, GL_RGBA, GL_FLOAT);
 	}
 
 	void Texture::setTextureData(const Color* data, glm::ivec2 size) {
 		setTextureData(data, size.x, size.y);
+	}
+
+	void Texture::setTextureType(TextureType type) {
+		m_textureType = type;
+	}
+
+	TextureType Texture::getTextureType() const {
+		return m_textureType;
 	}
 
 	void Texture::setFilter(TextureFilter filter) {

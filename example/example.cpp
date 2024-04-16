@@ -32,6 +32,11 @@ int main() {
             luna::Transform(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), textureScale).matrix(),
             &material
         );
+        renderer.push(
+            luna::getPrimitive(luna::Primitive::Quad),
+            luna::Transform(glm::vec3(0.5f, 0.25f, 0.1f), glm::vec3(0.0f), textureScale).matrix(),
+            &material
+        );
 
         renderer.endFrame();
         renderer.render(camera);
