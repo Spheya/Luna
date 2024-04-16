@@ -226,7 +226,7 @@ namespace luna {
 		return primitives[uint8_t(primitive)].get();
 	}
 
-	Shader* getDefaultShader() {
+	const Shader* getDefaultShader() {
 		return defaultShader.get();
 	}
 

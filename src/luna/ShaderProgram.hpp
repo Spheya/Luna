@@ -19,15 +19,15 @@ namespace luna {
 		bool isValid() const;
 
 		int uniformId(const char* name) const;
-		void uniform(int id, int value);
-		void uniform(int id, float value);
-		void uniform(int id, glm::vec1 value);
-		void uniform(int id, glm::vec2 value);
-		void uniform(int id, glm::vec3 value);
-		void uniform(int id, glm::vec4 value);
-		void uniform(int id, glm::mat3 value);
-		void uniform(int id, glm::mat4 value);
-		void uniform(int id, Color value);
+		void uniform(int id, int value) const;
+		void uniform(int id, float value) const;
+		void uniform(int id, glm::vec1 value) const;
+		void uniform(int id, glm::vec2 value) const;
+		void uniform(int id, glm::vec3 value) const;
+		void uniform(int id, glm::vec4 value) const;
+		void uniform(int id, glm::mat3 value) const;
+		void uniform(int id, glm::mat4 value) const;
+		void uniform(int id, Color value) const;
 
 		void bind() const;
 

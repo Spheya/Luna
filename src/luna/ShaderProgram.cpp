@@ -107,47 +107,47 @@ namespace luna {
 		return glGetUniformLocation(m_program, name);
 	}
 
-	void ShaderProgram::uniform(int id, int value) {
+	void ShaderProgram::uniform(int id, int value) const {
 		bind();
 		glUniform1i(id, value);
 	}
 
-	void ShaderProgram::uniform(int id, float value) {
+	void ShaderProgram::uniform(int id, float value) const {
 		bind();
 		glUniform1f(id, value);
 	}
 
-	void ShaderProgram::uniform(int id, glm::vec1 value) {
+	void ShaderProgram::uniform(int id, glm::vec1 value) const {
 		bind();
 		glUniform1f(id, value.x);
 	}
 
-	void ShaderProgram::uniform(int id, glm::vec2 value) {
+	void ShaderProgram::uniform(int id, glm::vec2 value) const {
 		bind();
 		glUniform2fv(id, 1, &value.x);
 	}
 
-	void ShaderProgram::uniform(int id, glm::vec3 value) {
+	void ShaderProgram::uniform(int id, glm::vec3 value) const {
 		bind();
 		glUniform3fv(id, 1, &value.x);
 	}
 
-	void ShaderProgram::uniform(int id, glm::vec4 value) {
+	void ShaderProgram::uniform(int id, glm::vec4 value) const {
 		bind();
 		glUniform4fv(id, 1, &value.x);
 	}
 
-	void ShaderProgram::uniform(int id, glm::mat3 value) {
+	void ShaderProgram::uniform(int id, glm::mat3 value) const {
 		bind();
 		glUniformMatrix3fv(id, 1, false, &value[0][0]);
 	}
 
-	void ShaderProgram::uniform(int id, glm::mat4 value) {
+	void ShaderProgram::uniform(int id, glm::mat4 value) const {
 		bind();
 		glUniformMatrix4fv(id, 1, false, &value[0][0]);
 	}
 
-	void ShaderProgram::uniform(int id, Color value) {
+	void ShaderProgram::uniform(int id, Color value) const {
 		bind();
 		glUniform4fv(id, 1, &value.r);
 	}

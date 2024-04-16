@@ -7,23 +7,23 @@ namespace luna {
 		setMainTextureScaleTranslation(glm::vec4(1.0f, 1.0f, 0.0f, 0.0f));
 	}
 
-	Material::Material(Shader* shader) :
+	Material::Material(const Shader* shader) :
 		m_shader(shader)
 	{
 		setMainColor(Color::White);
 		setMainTextureScaleTranslation(glm::vec4(1.0f, 1.0f, 0.0f, 0.0f));
 	}
 
-	void Material::setShader(Shader* shader) {
+	void Material::setShader(const Shader* shader) {
 		m_shader = shader;
 	}
 	
-	Shader* Material::getShader() const {
+	const Shader* Material::getShader() const {
 		return m_shader;
 	}
 
 	void Material::bind() const {
-		ShaderProgram* program = &m_shader->getProgram();
+		const ShaderProgram* program = &m_shader->getProgram();
 		program->bind();
 
 		for (const auto& param : m_floatParams) program->uniform(program->uniformId(param.name.c_str()), param.value);

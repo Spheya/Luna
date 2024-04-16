@@ -25,7 +25,7 @@ namespace luna {
 	float getTime();
 
 	const Mesh* getPrimitive(Primitive primitive);
-	Shader* getDefaultShader();
+	const Shader* getDefaultShader();
 	const Material* getDefaultMaterial();
 
 	void blit(const Texture* source, RenderTarget* target);
