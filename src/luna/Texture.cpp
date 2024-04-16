@@ -284,15 +284,21 @@ namespace luna {
 
 	Texture Texture::loadFromFile(const char* filepath) {
 		int width, height, nrChannels;
+
+		stbi_set_flip_vertically_on_load(true);
 		std::uint8_t* data = stbi_load(filepath, &width, &height, &nrChannels, 0);
 
+		Texture result;
+
 		if (nrChannels == 3) {
-			return Texture(data, width, height, TextureFormat::Rgb);
+			result = Texture(data, width, height, TextureFormat::Rgb);
 		}else if (nrChannels == 4) {
-			return Texture(data, width, height, TextureFormat::Rgba);
+			result = Texture(data, width, height, TextureFormat::Rgba);
+		} else {
+			log("Luna only supports textures with 3 or 4 colour channels!", MessageSeverity::Error);
 		}
 
-		log("Luna only supports textures with 3 or 4 colour channels!", MessageSeverity::Error);
-		return Texture();
+		stbi_image_free(data);
+		return result;
 	}
 }

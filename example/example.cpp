@@ -12,7 +12,7 @@ int main() {
     luna::Renderer renderer;
 
     luna::Camera camera(&window);
-    camera.setProjectionType(luna::ProjectionType::Perspective);
+    camera.setProjectionType(luna::ProjectionType::Orthographic);
     camera.setBackgroundColor(luna::Color::White);
 
     luna::Material material(luna::getDefaultShader());
@@ -29,7 +29,7 @@ int main() {
 
         renderer.push(
             luna::getPrimitive(luna::Primitive::Quad),
-            luna::Transform(glm::vec3(0.0f), glm::vec3(0.0f), textureScale).matrix(),
+            luna::Transform(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), textureScale).matrix(),
             &material
         );
 

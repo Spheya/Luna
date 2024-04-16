@@ -28,10 +28,10 @@ namespace luna {
 		void loadPrimitives() {
 			// Quad
 			Vertex quadVertices[] = {
-				Vertex(glm::vec3(-0.5f, +0.5f, 0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)),
-				Vertex(glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f)),
-				Vertex(glm::vec3(+0.5f, -0.5f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f)),
-				Vertex(glm::vec3(+0.5f, +0.5f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f))
+				Vertex(glm::vec3(-0.5f, +0.5f, 0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f)),
+				Vertex(glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)),
+				Vertex(glm::vec3(+0.5f, -0.5f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)),
+				Vertex(glm::vec3(+0.5f, +0.5f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f))
 			};
 			unsigned int quadIndices[] = { 0,1,2, 2,3,0 };
 			primitives[uint8_t(Primitive::Quad)] = std::make_unique<Mesh>(quadVertices, 4, quadIndices, 6);
