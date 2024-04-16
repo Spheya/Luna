@@ -104,11 +104,11 @@ namespace luna {
 	}
 
 	bool Input::isMouseButtonPressed(MouseButton button) {
-		return mouseButtonsDown[unsigned(button)] && !mouseButtonsDown[unsigned(button)];
+		return mouseButtonsDown[unsigned(button)] && !prevMouseButtonsDown[unsigned(button)];
 	}
 
 	bool Input::isMouseButtonReleased(MouseButton button) {
-		return !mouseButtonsDown[unsigned(button)] && mouseButtonsDown[unsigned(button)];
+		return !mouseButtonsDown[unsigned(button)] && prevMouseButtonsDown[unsigned(button)];
 	}
 
 	void Input::addWindow(GLFWwindow* window) {
