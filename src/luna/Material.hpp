@@ -20,7 +20,8 @@ namespace luna {
 
 		void setMainColor(Color value);
 		void setMainTexture(const Texture* value);
-		void setMainTextureScaleTranslation(const glm::vec4 value);
+		void setMainTextureScaleTranslation(glm::vec4 value);
+		void setMainTextureScaleTranslation(glm::vec2 scale, glm::vec2 translation);
 		void setValue(const char* name, float value);
 		void setValue(const char* name, glm::vec1 value);
 		void setValue(const char* name, glm::vec2 value);

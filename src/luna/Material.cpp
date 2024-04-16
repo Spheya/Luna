@@ -47,8 +47,12 @@ namespace luna {
 		setValue("MainTexture", value);
 	}
 
-	void Material::setMainTextureScaleTranslation(const glm::vec4 value) {
+	void Material::setMainTextureScaleTranslation(glm::vec4 value) {
 		setValue("MainTexture_ST", value);
+	}
+
+	void Material::setMainTextureScaleTranslation(glm::vec2 scale, glm::vec2 translation) {
+		setValue("MainTexture_ST", glm::vec4(scale, translation));
 	}
 
 	void Material::setValue(const char* name, float value) {
