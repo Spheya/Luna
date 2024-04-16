@@ -64,7 +64,8 @@ namespace luna {
 		m_minFilter(other.m_minFilter),
 		m_magFilter(other.m_magFilter),
 		m_horizontalWrap(other.m_horizontalWrap),
-		m_verticalWrap(other.m_verticalWrap)
+		m_verticalWrap(other.m_verticalWrap),
+		m_textureType(other.m_textureType)
 	{
 		other.m_texture = 0;
 	}
@@ -78,6 +79,7 @@ namespace luna {
 		m_magFilter = other.m_magFilter;
 		m_horizontalWrap = other.m_horizontalWrap;
 		m_verticalWrap = other.m_verticalWrap;
+		m_textureType = other.m_textureType;
 
 		other.m_texture = 0;
 
@@ -192,10 +194,6 @@ namespace luna {
 
 	void Texture::setTextureData(const Color* data, glm::ivec2 size) {
 		setTextureData(data, size.x, size.y);
-	}
-
-	void Texture::setTextureType(TextureType type) {
-		m_textureType = type;
 	}
 
 	TextureType Texture::getTextureType() const {

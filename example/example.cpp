@@ -16,9 +16,12 @@ int main() {
     camera.setBackgroundColor(luna::Color::White);
 
     luna::Material material(luna::getDefaultShader());
+    luna::Material solidMaterial(luna::getDefaultShader());
+    luna::Texture transparentTexture = luna::Texture::loadFromFile("assets/BlobbyTransparent.png");
     luna::Texture texture = luna::Texture::loadFromFile("assets/Blobby.png");
 
-    material.setMainTexture(&texture);
+    material.setMainTexture(&transparentTexture);
+    solidMaterial.setMainTexture(&texture);
 
     while (!luna::isCloseRequested() && !window.isCloseRequested()) {
         luna::update();
@@ -36,6 +39,16 @@ int main() {
             luna::getPrimitive(luna::Primitive::Quad),
             luna::Transform(glm::vec3(0.5f, 0.25f, 0.1f), glm::vec3(0.0f), textureScale).matrix(),
             &material
+        );
+        renderer.push(
+            luna::getPrimitive(luna::Primitive::Quad),
+            luna::Transform(glm::vec3(-0.25f, -0.25f, 0.05f), glm::vec3(0.0f), textureScale).matrix(),
+            &solidMaterial
+        );
+        renderer.push(
+            luna::getPrimitive(luna::Primitive::Quad),
+            luna::Transform(glm::vec3(-0.25f, 0.25f, -0.1f), glm::vec3(0.0f), textureScale).matrix(),
+            &solidMaterial
         );
 
         renderer.endFrame();

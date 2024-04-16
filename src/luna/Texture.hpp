@@ -51,7 +51,6 @@ namespace luna {
 		void setTextureData(const Color* data, int width, int height);
 		void setTextureData(const Color* data, glm::ivec2 size);
 
-		void setTextureType(TextureType type);
 		TextureType getTextureType() const;
 
 		void setFilter(TextureFilter filter);

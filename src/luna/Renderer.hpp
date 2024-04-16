@@ -17,7 +17,7 @@ namespace luna {
 
 		virtual void beginFrame();
 		virtual void endFrame();
-		virtual void render(const Camera& camera) const;
+		virtual void render(const Camera& camera);
 
 	protected:
 		struct RenderObject {
@@ -26,15 +26,20 @@ namespace luna {
 			const Material* material;
 		};
 
-		struct RenderBatch {
-			const RenderObject* start;
-			int size;
-			glm::vec3 nearest;
-		};
-
 		void draw(const Mesh* mesh) const;
 
+	private:
+		struct RenderBatch {
+			RenderBatch(std::vector<RenderObject>::iterator start) : start(start), size(1), min(glm::vec3(start->matrix[3])), max(glm::vec3(start->matrix[3])) {}
+
+			std::vector<RenderObject>::iterator start;
+			int size;
+			glm::vec3 min;
+			glm::vec3 max;
+		};
+
 		std::vector<RenderObject> m_renderObjects;
+		std::vector<RenderBatch> m_renderBatches;
 	};
 
 }
