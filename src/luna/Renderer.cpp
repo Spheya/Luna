@@ -52,6 +52,7 @@ namespace luna {
 		if (camera.getTarget()) {
 			camera.getTarget()->makeActiveTarget();
 			RenderTarget::clear(camera.getBackgroundColor());
+			luna::uploadCameraMatrices(camera.projection(), camera.getTransform().inverseMatrix());
 
 			// Sort batches based on distance
 			std::sort(m_renderBatches.begin(), m_renderBatches.end(), [&](const RenderBatch& a, const RenderBatch& b) {
@@ -89,8 +90,6 @@ namespace luna {
 					object.material->bind();
 					auto& shader = object.material->getShader()->getProgram();
 					shader.uniform(shader.uniformId("ModelMatrix"), object.matrix);
-					shader.uniform(shader.uniformId("ViewMatrix"), camera.getTransform().inverseMatrix());
-					shader.uniform(shader.uniformId("ProjectionMatrix"), camera.projection());
 					draw(object.mesh);
 				}
 			}

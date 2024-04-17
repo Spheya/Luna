@@ -6,6 +6,7 @@
 
 #include "Logger.hpp"
 #include "Input.hpp"
+#include "UniformBlock.hpp"
 
 namespace luna {
 
@@ -15,6 +16,8 @@ namespace luna {
 
 		float deltatime = 0.0f;
 		double time = 0.0f;
+
+		std::unique_ptr<UniformBlock> cameraMatricesBlock;
 
 		std::unique_ptr<Mesh> primitives[3];
 
@@ -103,8 +106,10 @@ namespace luna {
 				uniform vec4 MainColor;\n\
 				uniform vec4 MainTexture_ST;\n\
 				\n\
-				uniform mat4 ProjectionMatrix;\n\
-				uniform mat4 ViewMatrix;\n\
+				layout(std140, binding = 0) uniform CameraMatrices { \n\
+					mat4 ProjectionMatrix;\n\
+					mat4 ViewMatrix;\n\
+				};\n\
 				uniform mat4 ModelMatrix;\n\
 				\n\
 				void main() {\n\
@@ -139,6 +144,13 @@ namespace luna {
 				"#version 430 core\nin vec2 i;uniform sampler2D t;out vec4 v;void main(){v=texture(t,i);}"
 			);
 			blitShader->uniform(blitShader->uniformId("t"), 0);
+		}
+		
+		void loadUniformBlocks() {
+			cameraMatricesBlock = std::make_unique<UniformBlock>();
+			glm::mat4 initialData[] = { glm::mat4(1.0f), glm::mat4(1.0f) };
+			cameraMatricesBlock->setContent(initialData, sizeof(initialData));
+			cameraMatricesBlock->setBinding(0);
 		}
 	}
 
@@ -181,6 +193,7 @@ namespace luna {
 
 		loadPrimitives();
 		loadShaders();
+		loadUniformBlocks();
 
 		log("Luna context created", MessageSeverity::Info);
 
@@ -194,6 +207,7 @@ namespace luna {
 		defaultTexture.release();
 		defaultMaterial.release();
 		blitShader.release();
+		cameraMatricesBlock.release();
 
 		glfwTerminate();
 	}
@@ -255,5 +269,10 @@ namespace luna {
 		auto& program = material->getShader()->getProgram();
 		program.uniform(program.uniformId("MainTexture"), 0);
 		glDrawElements(GL_TRIANGLES, GLsizei(blitQuad->vertexCount()), GL_UNSIGNED_INT, nullptr);
+	}
+
+	void uploadCameraMatrices(const glm::mat4& projection, const glm::mat4& view) {
+		glm::mat4 data[] = { projection, view };
+		cameraMatricesBlock->setContent(data, sizeof(data));
 	}
 }

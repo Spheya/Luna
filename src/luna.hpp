@@ -15,5 +15,6 @@
 #include "luna/Shader.hpp"
 #include "luna/ShaderProgram.hpp"
 #include "luna/Texture.hpp"
+#include "luna/UniformBlock.hpp"
 #include "luna/Vertex.hpp"
 #include "luna/Window.hpp"
