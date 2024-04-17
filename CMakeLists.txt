@@ -11,7 +11,7 @@ option(LUNA_BUILD_EXAMPLE "Build the Luna example program" ON)
 
 add_subdirectory ("external")
 
-add_library (luna "src/luna/Window.cpp" "src/luna/Camera.cpp" "src/luna/Mesh.cpp" "src/luna/Renderer.cpp" "src/luna/Color.cpp" "src/luna/ShaderProgram.cpp" "src/luna/Logger.cpp" "src/luna/Shader.cpp" "src/luna/Context.cpp" "src/luna/RenderTarget.cpp" "src/luna/Material.cpp" "src/luna/Texture.cpp" "src/luna/RenderTexture.cpp" "src/luna/Input.cpp")
+add_library (luna $<TARGET_OBJECTS:glad> $<TARGET_OBJECTS:glfw> "src/luna/Window.cpp" "src/luna/Camera.cpp" "src/luna/Mesh.cpp" "src/luna/Renderer.cpp" "src/luna/Color.cpp" "src/luna/ShaderProgram.cpp" "src/luna/Logger.cpp" "src/luna/Shader.cpp" "src/luna/Context.cpp" "src/luna/RenderTarget.cpp" "src/luna/Material.cpp" "src/luna/Texture.cpp" "src/luna/RenderTexture.cpp" "src/luna/Input.cpp")
 set_property(TARGET luna PROPERTY CXX_STANDARD 20)
 
 target_include_directories(luna PUBLIC "src")
