@@ -12,6 +12,8 @@ namespace luna {
 	}
 
 	UniformBlock& UniformBlock::operator=(UniformBlock&& other) noexcept {
+		UniformBlock::~UniformBlock();
+
 		m_size = other.m_size;
 		m_ubo = other.m_ubo;
 

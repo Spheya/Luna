@@ -22,7 +22,8 @@ namespace luna {
 
 	class Texture {
 	public:
-		explicit Texture(TextureFormat format = TextureFormat::Rgba);
+		Texture() = default;
+		explicit Texture(TextureFormat format);
 		Texture(const std::uint8_t* data, int width, int height, TextureFormat format = TextureFormat::Rgba);
 		Texture(const std::uint8_t* data, glm::ivec2 size, TextureFormat format = TextureFormat::Rgba);
 		Texture(const Color* data, int width, int height, TextureFormat format = TextureFormat::Rgba);
@@ -72,6 +73,8 @@ namespace luna {
 		void setSize(glm::ivec2 size);
 
 		void bind(int textureSlot) const;
+
+		unsigned int getInternalHandle() const;
 
 		static Texture loadFromFile(const char* filepath);
 

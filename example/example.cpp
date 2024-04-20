@@ -1,5 +1,6 @@
 #include <iostream>
 #include <luna.hpp>
+#include <imgui.h>
 
 int main() {
     luna::setMessageCallback([](const char* message, const char* prefix, luna::MessageSeverity severity) {
@@ -9,7 +10,10 @@ int main() {
     luna::initialize();
 
     luna::Window window;
+    luna::Window window2;
     luna::Renderer renderer;
+
+    window.makeActiveImGuiContext();
 
     luna::Camera camera(&window);
     camera.setProjectionType(luna::ProjectionType::Perspective);
@@ -27,6 +31,12 @@ int main() {
         luna::update();
         camera.updateAspect();
         renderer.beginFrame();
+
+        window.makeActiveImGuiContext();
+        ImGui::ShowDemoWindow();
+
+        window2.makeActiveImGuiContext();
+        ImGui::ShowDemoWindow();
 
         bool debugCamera = luna::Input::isMouseButtonDown(luna::MouseButton::Right);
         window.lockCursor(debugCamera);
@@ -59,6 +69,7 @@ int main() {
         renderer.endFrame();
         renderer.render(camera);
         window.update();
+        window2.update();
     }
 
     luna::terminate();

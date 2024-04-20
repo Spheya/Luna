@@ -147,6 +147,14 @@ namespace luna {
 		Menu               = 348
 	};
 
+	enum class Cursor : uint8_t {
+		Arrow = 0,
+		TextSelect,
+		Hand,
+		ResizeVertical,
+		ResizeHorizontal,
+	};
+
 	class Input {
 		friend class Window;
 		friend void update();
@@ -158,8 +166,9 @@ namespace luna {
 		static void setKeyCallback(std::function<void(Key key, bool pressed)> callback);
 		static void setCharCallback(std::function<void(unsigned int codepoint)> callback);
 
-		static glm::vec2 getMousePos(const Window* window);
+		static glm::vec2 getMousePos(const Window& window);
 		static glm::vec2 getMouseDelta();
+		static bool hasMouseMoved();
 
 		static bool isKeyDown(Key key);
 		static bool isKeyPressed(Key key);
@@ -169,7 +178,14 @@ namespace luna {
 		static bool isMouseButtonPressed(MouseButton button);
 		static bool isMouseButtonReleased(MouseButton button);
 
+		static const char* getClipboardText();
+		static void setClipboardText(const char* text);
+
+		static void setMouseCursor(const Window& window, Cursor cursor);
+
 	private:
+		static void initializeCursors();
+
 		static void addWindow(GLFWwindow* window);
 		static void update();
 	};

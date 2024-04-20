@@ -16,7 +16,7 @@ namespace luna {
 
 		if (!m_renderObjects.empty()) {
 			std::sort(m_renderObjects.begin(), m_renderObjects.end(), [&](const RenderObject& a, const RenderObject& b) {
-				if (a.material->getRenderQueue() != b.material->getRenderQueue()) return a.material->getRenderQueue() < b.material->getRenderQueue();
+				if (a.material->getShader()->getProgram().getRenderQueue() != b.material->getShader()->getProgram().getRenderQueue()) return a.material->getShader()->getProgram().getRenderQueue() < b.material->getShader()->getProgram().getRenderQueue();
 				if (&a.material->getShader()->getProgram() != &b.material->getShader()->getProgram()) return &a.material->getShader()->getProgram() < &b.material->getShader()->getProgram();
 				return a.mesh < b.mesh;
 			});
@@ -26,8 +26,8 @@ namespace luna {
 
 			for (auto it = m_renderObjects.begin(); it != m_renderObjects.end(); ++it) {
 
-				if (it->material->getRenderQueue() != currentBatch.start->material->getRenderQueue() ||
-					(currentBatch.start->material->getRenderQueue()!=RenderQueue::Transparent && &currentBatch.start->material->getShader()->getProgram() != &it->material->getShader()->getProgram())) {
+				if (it->material->getShader()->getProgram().getRenderQueue() != currentBatch.start->material->getShader()->getProgram().getRenderQueue() ||
+					(currentBatch.start->material->getShader()->getProgram().getRenderQueue()!=RenderQueue::Transparent && &currentBatch.start->material->getShader()->getProgram() != &it->material->getShader()->getProgram())) {
 					m_renderBatches.push_back(currentBatch);
 					currentBatch = RenderBatch(it);
 				} else {
@@ -56,7 +56,7 @@ namespace luna {
 
 			// Sort batches based on distance
 			std::sort(m_renderBatches.begin(), m_renderBatches.end(), [&](const RenderBatch& a, const RenderBatch& b) {
-				if (a.start->material->getRenderQueue() != b.start->material->getRenderQueue()) return a.start->material->getRenderQueue() < b.start->material->getRenderQueue();
+				if (a.start->material->getShader()->getProgram().getRenderQueue() != b.start->material->getShader()->getProgram().getRenderQueue()) return a.start->material->getShader()->getProgram().getRenderQueue() < b.start->material->getShader()->getProgram().getRenderQueue();
 
 				glm::vec3 aMax = a.max - camera.getTransform().position;
 				glm::vec3 aMin = a.min - camera.getTransform().position;
@@ -72,7 +72,7 @@ namespace luna {
 			// Go over each batch
 			for (auto& batch : m_renderBatches) {
 				// Sort the content
-				if (batch.start->material->getRenderQueue() == RenderQueue::Transparent) {
+				if (batch.start->material->getShader()->getProgram().getRenderQueue() == RenderQueue::Transparent) {
 					std::sort(batch.start, batch.start + batch.size, [&](const RenderObject& a, const RenderObject& b) {
 						return glm::dot(glm::vec3(a.matrix[3]), camera.getTransform().position) < glm::dot(glm::vec3(b.matrix[3]), camera.getTransform().position);
 					});

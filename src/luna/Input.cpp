@@ -9,6 +9,8 @@
 #include "Logger.hpp"
 
 namespace luna {
+	void* getGraphicsContext();
+
 	namespace {
 		std::function<void(glm::vec2 position, glm::vec2 delta)> mouseMoveCallback;
 		std::function<void(MouseButton button, bool pressed)> mouseButtonCallback;
@@ -20,6 +22,8 @@ namespace luna {
 
 		bool keysDown[349];
 		bool prevKeysDown[349];
+
+		GLFWcursor* cursors[5];
 
 		glm::vec2 mousePos = glm::vec2(0.0f);
 		glm::vec2 mouseDelta = glm::vec2(0.0f);
@@ -130,14 +134,22 @@ namespace luna {
 			glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 	}
 
-	glm::vec2 Input::getMousePos(const Window* window) {
+	glm::vec2 Input::getMousePos(const Window& window) {
 		double x, y;
-		glfwGetCursorPos(window->getInternalWindowPointer(), &x, &y);
+		glfwGetCursorPos(window.getInternalWindowPointer(), &x, &y);
 		return glm::vec2(float(x), float(y));
 	}
 
 	glm::vec2 luna::Input::getMouseDelta() {
 		return mouseDelta;
+	}
+
+	bool Input::hasMouseMoved() {
+		return mouseDelta != glm::vec2(0.0f);
+	}
+
+	void luna::Input::setMouseCursor(const Window& window, Cursor cursor) {
+		glfwSetCursor(window.getInternalWindowPointer(), cursors[uint8_t(cursor)]);
 	}
 
 	void Input::update() {
@@ -146,4 +158,20 @@ namespace luna {
 		memcpy(prevKeysDown, keysDown, sizeof(prevKeysDown));
 	}
 
+
+	const char* Input::getClipboardText() {
+		return glfwGetClipboardString((GLFWwindow*) getGraphicsContext());
+	}
+
+	void Input::setClipboardText(const char* text) {
+		glfwSetClipboardString((GLFWwindow*)getGraphicsContext(), text);
+	}
+
+	void Input::initializeCursors() {
+		cursors[uint8_t(Cursor::Arrow)] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
+		cursors[uint8_t(Cursor::TextSelect)] = glfwCreateStandardCursor(GLFW_IBEAM_CURSOR);
+		cursors[uint8_t(Cursor::Hand)] = glfwCreateStandardCursor(GLFW_HAND_CURSOR);
+		cursors[uint8_t(Cursor::ResizeVertical)] = glfwCreateStandardCursor(GLFW_VRESIZE_CURSOR);
+		cursors[uint8_t(Cursor::ResizeHorizontal)] = glfwCreateStandardCursor(GLFW_HRESIZE_CURSOR);
+	}
 }

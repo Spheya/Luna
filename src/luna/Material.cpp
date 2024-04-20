@@ -22,14 +22,6 @@ namespace luna {
 		return m_shader;
 	}
 
-	void Material::setRenderQueue(RenderQueue queue) {
-		m_queue = queue;
-	}
-
-	RenderQueue Material::getRenderQueue() const {
-		return m_queue;
-	}
-
 	void Material::bind() const {
 		const ShaderProgram* program = &m_shader->getProgram();
 		program->bind();
@@ -53,10 +45,6 @@ namespace luna {
 
 	void Material::setMainTexture(const Texture* value) {
 		setValue("MainTexture", value);
-
-		m_queue = RenderQueue::Solid;
-		if (value->getTextureType() == TextureType::Transparent)
-			m_queue = RenderQueue::Transparent;
 	}
 
 	void Material::setMainTextureScaleTranslation(glm::vec4 value) {

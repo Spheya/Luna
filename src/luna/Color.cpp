@@ -4,6 +4,7 @@
 
 namespace luna {
 
+	Color Color::Clear(0.0f, 0.0f, 0.0f, 0.0f);
 	Color Color::Red(1.0f, 0.0f, 0.0f);
 	Color Color::Green(0.0f, 1.0f, 0.0f);
 	Color Color::Blue(0.0f, 0.0f, 1.0f);
@@ -32,7 +33,6 @@ namespace luna {
 		return glm::vec4(r, g, b, a);
 	}
 
-
 	glm::u8vec3 Color::rgb() const {
 		return glm::u8vec3(
 			std::uint8_t(std::clamp(r, 0.0f, 1.0f) * 255.0f),
@@ -48,6 +48,13 @@ namespace luna {
 			std::uint8_t(std::clamp(b, 0.0f, 1.0f) * 255.0f),
 			std::uint8_t(std::clamp(a, 0.0f, 1.0f) * 255.0f)
 		);
+	}
+
+	uint32_t Color::compressed() const {
+		return (std::uint8_t(std::clamp(r, 0.0f, 1.0f) * 255.0f)) |
+			(std::uint8_t(std::clamp(g, 0.0f, 1.0f) * 255.0f) << 8) |
+			(std::uint8_t(std::clamp(b, 0.0f, 1.0f) * 255.0f) << 16) |
+			(std::uint8_t(std::clamp(a, 0.0f, 1.0f) * 255.0f) << 24);
 	}
 
 }

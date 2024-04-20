@@ -14,7 +14,7 @@ namespace luna {
 		bool validContext = false;
 		GLFWwindow* graphicsContext;
 
-		float deltatime = 0.0f;
+		float deltaTime = 0.0f;
 		double time = 0.0f;
 
 		std::unique_ptr<UniformBlock> cameraMatricesBlock;
@@ -194,6 +194,8 @@ namespace luna {
 		loadPrimitives();
 		loadShaders();
 		loadUniformBlocks();
+		Input::initializeCursors();
+		log("Loaded default assets", MessageSeverity::Info);
 
 		log("Luna context created", MessageSeverity::Info);
 
@@ -208,8 +210,12 @@ namespace luna {
 		defaultMaterial.release();
 		blitShader.release();
 		cameraMatricesBlock.release();
+		log("Unloaded default assets", MessageSeverity::Info);
 
 		glfwTerminate();
+		log("Glfw context terminated", MessageSeverity::Info);
+
+		log("Luna context terminated", MessageSeverity::Info);
 	}
 
 	bool isContextValid() {
@@ -229,12 +235,12 @@ namespace luna {
 		glfwPollEvents(); // todo: do this on separate thread
 
 		double curTime = glfwGetTime();
-		deltatime = float(curTime - time);
+		deltaTime = float(curTime - time);
 		time = curTime;
 	}
 
-	float getDeltatime() {
-		return deltatime;
+	float getDeltaTime() {
+		return deltaTime;
 	}
 
 	float getTime() {

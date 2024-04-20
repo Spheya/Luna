@@ -21,7 +21,7 @@ namespace luna {
 
 	void update();
 
-	float getDeltatime();
+	float getDeltaTime();
 	float getTime();
 
 	const Mesh* getPrimitive(Primitive primitive);

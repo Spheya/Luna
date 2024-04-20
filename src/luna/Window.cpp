@@ -49,10 +49,14 @@ namespace luna {
 			"#version 430 core\nin vec2 i;uniform sampler2D t;out vec4 v;void main(){v=texture(t,i);}"
 		);
 		m_blitShader.uniform(m_blitShader.uniformId("t"), 0);
+		m_blitShader.setDepthTestMode(DepthTestMode::Off);
+		m_blitShader.setBlendMode(BlendMode::Off);
 
 		m_contents->bind(0);
 		m_blitShader.bind();
 		m_blitQuad.bind();
+
+		m_imguiContext = std::make_unique<ImGuiContext>(this);
 
 		glfwMakeContextCurrent((GLFWwindow*)luna::getGraphicsContext());
 
@@ -104,6 +108,9 @@ namespace luna {
 
 		glViewport(0, 0, getWidth(), getHeight());
 		glDrawElements(GL_TRIANGLES, GLsizei(m_blitQuad.vertexCount()), GL_UNSIGNED_INT, nullptr);
+
+		m_imguiContext->update();
+
 		glfwSwapBuffers(m_windowHandle);
 
 		glfwMakeContextCurrent((GLFWwindow*)luna::getGraphicsContext());
@@ -140,5 +147,9 @@ namespace luna {
 
 	GLFWwindow* Window::getInternalWindowPointer() const {
 		return m_windowHandle;
+	}
+
+	void Window::makeActiveImGuiContext() const {
+		m_imguiContext->makeCurrentContext();
 	}
 }

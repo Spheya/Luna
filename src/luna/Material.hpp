@@ -7,12 +7,6 @@
 #include "Texture.hpp"
 
 namespace luna {
-
-	enum class RenderQueue {
-		Solid = 1000,
-		Transparent = 2000
-	};
-
 	class Material {
 	public:
 		Material();
@@ -20,9 +14,6 @@ namespace luna {
 
 		void setShader(const Shader* shader);
 		const Shader* getShader() const;
-
-		void setRenderQueue(RenderQueue queue);
-		RenderQueue getRenderQueue() const;
 
 		void bind() const;
 
@@ -68,8 +59,8 @@ namespace luna {
 		std::vector<Parameter<glm::vec4>> m_vec4Params;
 		std::vector<Parameter<glm::mat3>> m_mat3Params;
 		std::vector<Parameter<glm::mat4>> m_mat4Params;
+		
 		const Shader* m_shader = nullptr;
-		RenderQueue m_queue = RenderQueue::Solid;
 	};
 
 }

@@ -333,4 +333,8 @@ namespace luna {
 		stbi_image_free(data);
 		return result;
 	}
+
+	unsigned int Texture::getInternalHandle() const {
+		return m_texture;
+	}
 }

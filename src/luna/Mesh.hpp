@@ -22,6 +22,7 @@ namespace luna {
 		void setIndices(const unsigned int* indices, size_t size);
 
 		void bind() const;
+		unsigned int getInternalHandle() const;
 		size_t vertexCount() const;
 
 		static Mesh loadFromFile(const char* filepath);

@@ -6,6 +6,7 @@
 #include "RenderTexture.hpp"
 #include "ShaderProgram.hpp"
 #include "Mesh.hpp"
+#include "ImGuiContext.hpp"
 
 struct GLFWwindow;
 
@@ -36,6 +37,10 @@ namespace luna {
 
 		GLFWwindow* getInternalWindowPointer() const;
 
+#ifndef IMGUI_DISABLE
+		void makeActiveImGuiContext() const;
+#endif
+
 	private:
 		bool m_isValid;
 
@@ -44,6 +49,10 @@ namespace luna {
 		Mesh m_blitQuad;
 		ShaderProgram m_blitShader;
 		std::unique_ptr<RenderTexture> m_contents;
+
+#ifndef IMGUI_DISABLE
+		std::unique_ptr<ImGuiContext> m_imguiContext;
+#endif
 	};
 
 }

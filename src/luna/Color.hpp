@@ -5,6 +5,7 @@
 namespace luna {
 
 	struct Color {
+		static Color Clear;
 		static Color Red;
 		static Color Green;
 		static Color Blue;
@@ -25,6 +26,8 @@ namespace luna {
 		glm::vec4 vec4() const;
 		glm::u8vec3 rgb() const;
 		glm::u8vec4 rgba() const;
+
+		uint32_t compressed() const;
 
 		float r, g, b, a;
 	};
