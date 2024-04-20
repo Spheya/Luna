@@ -30,6 +30,8 @@ namespace luna {
 		// Create the ImGui context
 		ImGui::Context* prevContext = ImGui::GetCurrentContext();
 		m_context = ImGui::CreateContext();
+		ImGui::SetCurrentContext(m_context);
+
 		ImGui_ImplOpenGL3_Init();
 
 		ImGuiIO& io = ImGui::GetIO();
@@ -44,7 +46,7 @@ namespace luna {
 		update();
 
 		// Set the context back to what it originally was, if there was any
-		if (!prevContext)
+		if (prevContext)
 			ImGui::SetCurrentContext(prevContext);
 
 		log("ImGui context created", MessageSeverity::Info);
@@ -72,8 +74,20 @@ namespace luna {
 
 	ImGuiContext::~ImGuiContext() {
 		if (m_context) {
+			ImGui::Context* prevContext = ImGui::GetCurrentContext();
+			ImGui::SetCurrentContext(m_context);
+
+			ImGuiIO& io = ImGui::GetIO();
+			delete io.BackendPlatformUserData;
+			io.BackendPlatformUserData = nullptr;
+			io.BackendPlatformName = nullptr;
+
 			ImGui_ImplOpenGL3_Shutdown();
 			ImGui::DestroyContext(m_context);
+
+			ImGui::SetCurrentContext(prevContext);
+
+			log("ImGui context destroyed", MessageSeverity::Info);
 		}
 	}
 
@@ -95,7 +109,7 @@ namespace luna {
 		ImGuiIO& io = ImGui::GetIO();
 		glm::vec2 mousePos = Input::getMousePos(*m_window);
 
-		io.DisplaySize = ImVec2(m_window->getWidth(), m_window->getHeight());
+		io.DisplaySize = ImVec2(float(m_window->getWidth()), float(m_window->getHeight()));
 		io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
 		io.DeltaTime = getDeltaTime();
 		io.MousePos = ImVec2(mousePos.x, mousePos.y);
