@@ -6,11 +6,11 @@
 #include "RenderTexture.hpp"
 #include "ShaderProgram.hpp"
 #include "Mesh.hpp"
-#include "ImGuiContext.hpp"
 
 struct GLFWwindow;
 
 namespace luna {
+	class ImGuiContext;
 
 	class Window : public RenderTarget {
 		friend void onWindowSizeChange(GLFWwindow*, int, int);

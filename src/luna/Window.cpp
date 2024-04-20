@@ -5,6 +5,7 @@
 #include "Logger.hpp"
 #include "Context.hpp"
 #include "Input.hpp"
+#include "ImGuiContext.hpp"
 
 namespace luna {
 
