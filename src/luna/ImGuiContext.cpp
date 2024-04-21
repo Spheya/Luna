@@ -2,8 +2,8 @@
 #ifndef IMGUI_DISABLE
 #include "imgui/imgui_impl_opengl3.h"
 #include "Logger.hpp"
-#include "Window.hpp"
 #include "Input.hpp"
+#include "Window.hpp"
 
 namespace luna {
 
@@ -11,7 +11,6 @@ namespace luna {
 
 	namespace {
 		struct BackendPlatformUserData {
-			const Window* window;
 		};
 
 		BackendPlatformUserData* getBackendPlatformUserData() {
@@ -24,9 +23,7 @@ namespace luna {
 		}
 	}
 
-	ImGuiContext::ImGuiContext(const Window* window) :
-		m_window(window)
-	{
+	ImGuiContext::ImGuiContext() {
 		// Create the ImGui context
 		ImGui::Context* prevContext = ImGui::GetCurrentContext();
 		m_context = ImGui::CreateContext();
@@ -41,10 +38,6 @@ namespace luna {
 		io.BackendPlatformUserData = data;
 		io.BackendPlatformName = "Luna";
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-		data->window = window;
-
-		// Start first frame
-		update();
 
 		// Set the context back to what it originally was, if there was any
 		if (prevContext)
@@ -54,20 +47,15 @@ namespace luna {
 	}
 
 	ImGuiContext::ImGuiContext(ImGuiContext&& other) noexcept :
-		m_window(other.m_window),
 		m_context(other.m_context)
 	{
-		other.m_window = nullptr;
 		other.m_context = nullptr;
 	}
 
 	ImGuiContext& ImGuiContext::operator=(ImGuiContext&& other) noexcept {
 		ImGuiContext::~ImGuiContext();
-
-		m_window = other.m_window;
 		m_context = other.m_context;
 
-		other.m_window = nullptr;
 		other.m_context = nullptr;
 
 		return *this;
@@ -92,11 +80,11 @@ namespace luna {
 		}
 	}
 
-	void ImGuiContext::makeCurrentContext() {
+	void ImGuiContext::makeCurrentContext() const {
 		ImGui::SetCurrentContext(m_context);
 	}
 
-	void ImGuiContext::update() {
+	void ImGuiContext::update(const Window* window) {
 		ImGui::Context* prevContext = ImGui::GetCurrentContext();
 		ImGui::SetCurrentContext(m_context);
 
@@ -108,9 +96,9 @@ namespace luna {
 
 		// Update backend platform
 		ImGuiIO& io = ImGui::GetIO();
-		glm::vec2 mousePos = Input::getMousePos(*m_window);
+		glm::vec2 mousePos = Input::getMousePos(*window);
 
-		io.DisplaySize = ImVec2(float(m_window->getWidth()), float(m_window->getHeight()));
+		io.DisplaySize = ImVec2(float(window->getWidth()), float(window->getHeight()));
 		io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
 		io.DeltaTime = getDeltaTime();
 		io.MousePos = ImVec2(mousePos.x, mousePos.y);

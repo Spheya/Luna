@@ -12,21 +12,20 @@ namespace luna {
 
 	class ImGuiContext {
 	public:
-		ImGuiContext(const Window* window);
+		ImGuiContext();
 		ImGuiContext(ImGuiContext&) = delete;
 		ImGuiContext& operator=(ImGuiContext&) = delete;
 		ImGuiContext(ImGuiContext&& other) noexcept;
 		ImGuiContext& operator=(ImGuiContext&& other) noexcept;
 		~ImGuiContext();
 
-		void makeCurrentContext();
+		void makeCurrentContext() const;
 
-		void update();
+		void update(const Window* window);
 
 	private:
 		void render();
-
-		const Window* m_window = nullptr;
+		
 		ImGui::Context* m_context = nullptr;
 	};
 

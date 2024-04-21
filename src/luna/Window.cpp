@@ -5,7 +5,6 @@
 #include "Logger.hpp"
 #include "Context.hpp"
 #include "Input.hpp"
-#include "ImGuiContext.hpp"
 
 namespace luna {
 
@@ -57,9 +56,9 @@ namespace luna {
 		m_blitShader.bind();
 		m_blitQuad.bind();
 
-		m_imguiContext = std::make_unique<ImGuiContext>(this);
-
 		glfwMakeContextCurrent((GLFWwindow*)luna::getGraphicsContext());
+
+		m_imguiContext.update(this);
 
 		m_isValid = true;
 		log("Window created", MessageSeverity::Info);
@@ -110,7 +109,7 @@ namespace luna {
 		glViewport(0, 0, getWidth(), getHeight());
 		glDrawElements(GL_TRIANGLES, GLsizei(m_blitQuad.vertexCount()), GL_UNSIGNED_INT, nullptr);
 
-		m_imguiContext->update();
+		m_imguiContext.update(this);
 
 		glfwSwapBuffers(m_windowHandle);
 
@@ -158,6 +157,6 @@ namespace luna {
 	}
 
 	void Window::makeActiveImGuiContext() const {
-		m_imguiContext->makeCurrentContext();
+		m_imguiContext.makeCurrentContext();
 	}
 }

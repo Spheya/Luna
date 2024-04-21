@@ -6,11 +6,11 @@
 #include "RenderTexture.hpp"
 #include "ShaderProgram.hpp"
 #include "Mesh.hpp"
+#include "ImGuiContext.hpp"
 
 struct GLFWwindow;
 
 namespace luna {
-	class ImGuiContext;
 
 	class Window : public RenderTarget {
 		friend void onWindowSizeChange(GLFWwindow*, int, int);
@@ -52,7 +52,7 @@ namespace luna {
 		std::unique_ptr<RenderTexture> m_contents;
 
 #ifndef IMGUI_DISABLE
-		std::unique_ptr<ImGuiContext> m_imguiContext;
+		ImGuiContext m_imguiContext;
 #endif
 	};
 
