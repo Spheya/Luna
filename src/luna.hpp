@@ -4,6 +4,7 @@
 #include "luna/Color.hpp"
 #include "luna/Context.hpp"
 #include "luna/DebugCamera.hpp"
+#include "luna/ForwardRenderer.hpp"
 #include "luna/Input.hpp"
 #include "luna/Logger.hpp"
 #include "luna/Material.hpp"

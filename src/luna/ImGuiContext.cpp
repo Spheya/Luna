@@ -40,6 +40,7 @@ namespace luna {
 		BackendPlatformUserData* data = new BackendPlatformUserData();
 		io.BackendPlatformUserData = data;
 		io.BackendPlatformName = "Luna";
+		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 		data->window = window;
 
 		// Start first frame

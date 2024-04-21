@@ -7,9 +7,9 @@
 
 #include "Window.hpp"
 #include "Logger.hpp"
+#include "Context.hpp"
 
 namespace luna {
-	void* getGraphicsContext();
 
 	namespace {
 		std::function<void(glm::vec2 position, glm::vec2 delta)> mouseMoveCallback;

@@ -142,7 +142,7 @@ namespace luna {
 		glVertexAttribPointer(0, 3,         GL_FLOAT, false, sizeof(Vertex), (void*)0);  // Position
 		glVertexAttribPointer(1, 2,         GL_FLOAT, false, sizeof(Vertex), (void*)12); // Uv
 		glVertexAttribPointer(2, 3,         GL_FLOAT, false, sizeof(Vertex), (void*)20); // Normal
-		glVertexAttribPointer(3, 4, GL_UNSIGNED_BYTE, false, sizeof(Vertex), (void*)32); // Color
+		glVertexAttribPointer(3, 4, GL_UNSIGNED_BYTE,  true, sizeof(Vertex), (void*)32); // Color
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 		glEnableVertexAttribArray(2);

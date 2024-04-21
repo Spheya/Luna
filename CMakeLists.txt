@@ -8,11 +8,12 @@ endif()
 
 project ("luna")
 option(LUNA_BUILD_EXAMPLE "Build the Luna example program" ON)
+option(LUNA_BUILD_SANDBOX "Build the Luna sandbox program" ON)
 option(LUNA_ENABLE_IMGUI "Enable ImGui" ON)
 
 add_subdirectory ("external")
 
-add_library (luna $<TARGET_OBJECTS:glad> $<TARGET_OBJECTS:glfw> $<TARGET_OBJECTS:imgui> "src/luna/Window.cpp" "src/luna/Camera.cpp" "src/luna/Mesh.cpp" "src/luna/Renderer.cpp" "src/luna/Color.cpp" "src/luna/ShaderProgram.cpp" "src/luna/Logger.cpp" "src/luna/Shader.cpp" "src/luna/Context.cpp" "src/luna/RenderTarget.cpp" "src/luna/Material.cpp" "src/luna/Texture.cpp" "src/luna/RenderTexture.cpp" "src/luna/Input.cpp" "src/luna/UniformBlock.cpp" "src/luna/ImGuiContext.cpp" "src/luna/imgui/imgui_impl_opengl3.cpp"  )
+add_library (luna $<TARGET_OBJECTS:glad> $<TARGET_OBJECTS:glfw> $<TARGET_OBJECTS:imgui> "src/luna/Window.cpp" "src/luna/Camera.cpp" "src/luna/Mesh.cpp" "src/luna/Renderer.cpp" "src/luna/Color.cpp" "src/luna/ShaderProgram.cpp" "src/luna/Logger.cpp" "src/luna/Shader.cpp" "src/luna/Context.cpp" "src/luna/RenderTarget.cpp" "src/luna/Material.cpp" "src/luna/Texture.cpp" "src/luna/RenderTexture.cpp" "src/luna/Input.cpp" "src/luna/UniformBlock.cpp" "src/luna/ImGuiContext.cpp" "src/luna/imgui/imgui_impl_opengl3.cpp" "src/luna/ForwardRenderer.cpp")
 set_property(TARGET luna PROPERTY CXX_STANDARD 20)
 
 target_include_directories(luna PUBLIC "src")
@@ -25,4 +26,8 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/ DESTINATION include FILES_MATCHING PA
 
 if(LUNA_BUILD_EXAMPLE)
 	add_subdirectory ("example")
+endif()
+
+if(LUNA_BUILD_SANDBOX)
+	add_subdirectory ("sandbox")
 endif()
