@@ -130,6 +130,13 @@ namespace luna {
 		glfwSetInputMode(m_windowHandle, GLFW_CURSOR, lock ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
 	}
 
+
+	void Window::enableVSync(bool enable) {
+		glfwMakeContextCurrent(m_windowHandle);
+		glfwSwapInterval(enable ? 1 : 0);
+		glfwMakeContextCurrent((GLFWwindow*)luna::getGraphicsContext());
+	}
+
 	void Window::makeActiveTarget() {
 		m_contents->makeActiveTarget();
 	}

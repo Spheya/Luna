@@ -29,6 +29,7 @@ namespace luna {
 		void close();
 
 		void lockCursor(bool lock = true);
+		void enableVSync(bool enable = true);
 
 		void makeActiveTarget() override;
 		glm::ivec2 getSize() const override;

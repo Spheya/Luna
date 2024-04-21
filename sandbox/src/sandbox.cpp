@@ -12,6 +12,8 @@ int main() {
     luna::Window window;
     luna::ForwardRenderer renderer;
 
+    window.enableVSync(false);
+
     luna::Camera camera(&window);
     camera.setProjectionType(luna::ProjectionType::Perspective);
     camera.getTransform().position = glm::vec3(-1.0f);
