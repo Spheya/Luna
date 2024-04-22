@@ -60,7 +60,12 @@ int main() {
         for (int x = 0; x < cubeWidth; x++) {
             for (int y = 0; y < cubeWidth; y++) {
                 for (int z = 0; z < cubeWidth; z++) {
-                    renderer.push(luna::getPrimitive(primitives[selectedPrimitive]), luna::Transform(glm::vec3(x, y, z) * 2.0f).matrix());
+                    renderer.push(luna::getPrimitive(primitives[selectedPrimitive]), glm::mat4(
+                        glm::vec4(1.0f, 0.0f, 0.0f, 0.0f),    
+                        glm::vec4(0.0f, 1.0f, 0.0f, 0.0f),    
+                        glm::vec4(0.0f, 0.0f, 1.0f, 0.0f),    
+                        glm::vec4(x, y, z, 1.0f) * 2.0f
+                    ));
                 }
             }
         }

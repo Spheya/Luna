@@ -15,24 +15,26 @@ namespace luna {
 
 		if (!m_renderObjects.empty()) {
 			std::sort(m_renderObjects.begin(), m_renderObjects.end(), [&](const RenderObject& a, const RenderObject& b) {
-				if (a.material->getShader()->getProgram().getRenderQueue() != b.material->getShader()->getProgram().getRenderQueue()) return a.material->getShader()->getProgram().getRenderQueue() < b.material->getShader()->getProgram().getRenderQueue();
-				if (&a.material->getShader()->getProgram() != &b.material->getShader()->getProgram()) return &a.material->getShader()->getProgram() < &b.material->getShader()->getProgram();
+				const ShaderProgram* aShader = &a.material->getShader()->getProgram();
+				const ShaderProgram* bShader = &b.material->getShader()->getProgram();
+
+				if (aShader->getRenderQueue() != bShader->getRenderQueue()) return aShader->getRenderQueue() < bShader->getRenderQueue();
+				if (aShader != bShader) return aShader < bShader;
 				return a.mesh < b.mesh;
-				});
+			});
 
 			RenderBatch currentBatch(m_renderObjects.begin());
 			currentBatch.size = 0;
 
 			for (auto it = m_renderObjects.begin(); it != m_renderObjects.end(); ++it) {
-
-				if (it->material->getShader()->getProgram().getRenderQueue() != currentBatch.start->material->getShader()->getProgram().getRenderQueue() ||
-					(currentBatch.start->material->getShader()->getProgram().getRenderQueue() != RenderQueue::Transparent && &currentBatch.start->material->getShader()->getProgram() != &it->material->getShader()->getProgram())) {
+				const ShaderProgram& batchShader = currentBatch.start->material->getShader()->getProgram();
+				const ShaderProgram& shader = it->material->getShader()->getProgram();
+				if (shader.getRenderQueue() != batchShader.getRenderQueue() ||
+					(batchShader.getRenderQueue() != RenderQueue::Transparent && &batchShader != &shader)) {
 					m_renderBatches.push_back(currentBatch);
 					currentBatch = RenderBatch(it);
 				} else {
 					++currentBatch.size;
-					currentBatch.max = glm::max(glm::vec3(it->matrix[3]), currentBatch.max);
-					currentBatch.min = glm::min(glm::vec3(it->matrix[3]), currentBatch.min);
 				}
 			}
 			m_renderBatches.push_back(currentBatch);
@@ -53,48 +55,61 @@ namespace luna {
 			RenderTarget::clear(camera.getBackgroundColor());
 			luna::uploadCameraMatrices(camera.projection(), camera.getTransform().inverseMatrix());
 
+			// Cache distance to camera
+			for (auto& object : m_renderObjects) {
+				object.distToCameraSq = glm::dot(glm::vec3(object.matrix[3]), camera.getTransform().position);
+			}
+
+			for (auto& batch : m_renderBatches) {
+				batch.distToCameraSq = 1e32;
+				for (auto it = batch.start; it != batch.start + batch.size; ++it)
+					batch.distToCameraSq = std::min(it->distToCameraSq, batch.distToCameraSq);
+			}
+
 			// Sort batches based on distance
-			std::sort(m_renderBatches.begin(), m_renderBatches.end(), [&](const RenderBatch& a, const RenderBatch& b) {
-				if (a.start->material->getShader()->getProgram().getRenderQueue() != b.start->material->getShader()->getProgram().getRenderQueue()) return a.start->material->getShader()->getProgram().getRenderQueue() < b.start->material->getShader()->getProgram().getRenderQueue();
-
-				glm::vec3 aMax = glm::abs(a.max - camera.getTransform().position);
-				glm::vec3 aMin = glm::abs(a.min - camera.getTransform().position);
-				glm::vec3 bMax = glm::abs(b.max - camera.getTransform().position);
-				glm::vec3 bMin = glm::abs(b.min - camera.getTransform().position);
-				glm::vec3 aClosest = glm::min(aMax, aMin);
-				glm::vec3 bClosest = glm::min(bMax, bMin);
-
-				float distA = glm::dot(aClosest, aClosest);
-				float distB = glm::dot(bClosest, bClosest);
-
-				return distA > distB;
-				});
+			std::sort(m_renderBatches.begin(), m_renderBatches.end());
 
 			// Go over each batch
 			for (auto& batch : m_renderBatches) {
-				// Sort the content
+				// Sort batch contents
+				std::sort(batch.start, batch.start + batch.size);
+
+				// Render batch contents
 				if (batch.start->material->getShader()->getProgram().getRenderQueue() == RenderQueue::Transparent) {
-					std::sort(batch.start, batch.start + batch.size, [&](const RenderObject& a, const RenderObject& b) {
-						return glm::dot(glm::vec3(a.matrix[3]), camera.getTransform().position) < glm::dot(glm::vec3(b.matrix[3]), camera.getTransform().position);
-						});
+					for (int i = 0; i < batch.size; ++i) {
+						auto& object = *(batch.start + i);
+
+						object.mesh->bind();
+						object.material->bind();
+						auto& shader = object.material->getShader()->getProgram();
+						shader.uniform(shader.uniformId("ModelMatrix"), object.matrix);
+						draw(object.mesh);
+					}
 				} else {
-					std::sort(batch.start, batch.start + batch.size, [&](const RenderObject& a, const RenderObject& b) {
-						return glm::dot(glm::vec3(a.matrix[3]), camera.getTransform().position) > glm::dot(glm::vec3(b.matrix[3]), camera.getTransform().position);
-						});
-				}
+					batch.start->mesh->bind();
+					batch.start->material->bind();
+					auto& shader = batch.start->material->getShader()->getProgram();
+					int modelMatrixId = shader.uniformId("ModelMatrix");
 
-				// Render every object in the batch
-				for (int i = 0; i < batch.size; ++i) {
-					auto& object = *(batch.start + i);
-
-					object.mesh->bind();
-					object.material->bind();
-					auto& shader = object.material->getShader()->getProgram();
-					shader.uniform(shader.uniformId("ModelMatrix"), object.matrix);
-					draw(object.mesh);
+					for (int i = 0; i < batch.size; ++i) {
+						auto& object = *(batch.start + i);
+						shader.uniform(modelMatrixId, object.matrix);
+						draw(object.mesh);
+					}
 				}
 			}
 		}
 	}
 
+	bool ForwardRenderer::RenderBatch::operator<(const RenderBatch& other) {
+		const ShaderProgram& aShader = start->material->getShader()->getProgram();
+		const ShaderProgram& bShader = other.start->material->getShader()->getProgram();
+		if (aShader.getRenderQueue() != bShader.getRenderQueue()) return aShader.getRenderQueue() < bShader.getRenderQueue();
+		return distToCameraSq > other.distToCameraSq;
+	}
+
+	bool ForwardRenderer::RenderObject::operator<(const RenderObject& other) {
+		if (material->getShader()->getProgram().getRenderQueue() == RenderQueue::Transparent) return distToCameraSq < other.distToCameraSq;
+		return distToCameraSq > other.distToCameraSq;
+	}
 }

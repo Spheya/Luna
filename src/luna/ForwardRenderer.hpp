@@ -18,15 +18,19 @@ namespace luna {
 			const Mesh* mesh;
 			glm::mat4 matrix;
 			const Material* material;
+			float distToCameraSq;
+
+			bool operator<(const RenderObject& other);
 		};
 
 		struct RenderBatch {
-			RenderBatch(std::vector<RenderObject>::iterator start) : start(start), size(1), min(glm::vec3(start->matrix[3])), max(glm::vec3(start->matrix[3])) {}
+			RenderBatch(std::vector<RenderObject>::iterator start) : start(start), size(1), distToCameraSq(0.0f) {}
 
 			std::vector<RenderObject>::iterator start;
-			int size;
-			glm::vec3 min;
-			glm::vec3 max;
+			size_t size;
+			float distToCameraSq;
+
+			bool operator<(const RenderBatch& other);
 		};
 
 		std::vector<RenderBatch> m_renderBatches;
