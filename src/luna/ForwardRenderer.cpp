@@ -30,7 +30,9 @@ namespace luna {
 				const ShaderProgram& batchShader = currentBatch.start->material->getShader()->getProgram();
 				const ShaderProgram& shader = it->material->getShader()->getProgram();
 				if (shader.getRenderQueue() != batchShader.getRenderQueue() ||
-					(batchShader.getRenderQueue() != RenderQueue::Transparent && &batchShader != &shader)) {
+					(batchShader.getRenderQueue() != RenderQueue::Transparent && &batchShader != &shader) ||
+					it->mesh != currentBatch.start->mesh
+				) {
 					m_renderBatches.push_back(currentBatch);
 					currentBatch = RenderBatch(it);
 				} else {
