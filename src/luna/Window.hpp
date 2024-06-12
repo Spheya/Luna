@@ -47,8 +47,8 @@ namespace luna {
 
 		GLFWwindow* m_windowHandle;
 
-		Mesh m_blitQuad;
-		ShaderProgram m_blitShader;
+		std::unique_ptr<Mesh> m_blitQuad;
+		std::unique_ptr<ShaderProgram> m_blitShader;
 		std::unique_ptr<RenderTexture> m_contents;
 
 #ifndef IMGUI_DISABLE

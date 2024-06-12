@@ -41,20 +41,21 @@ namespace luna {
 
 		unsigned int indices[] = { 0,1,2, 2,3,0 };
 
-		m_blitQuad.setVertices(vertices, 4);
-		m_blitQuad.setIndices(indices, 6);
+		m_blitQuad = std::make_unique<Mesh>(vertices, 4, indices, 6);
 
-		m_blitShader.load(
+
+
+		m_blitShader = std::make_unique<ShaderProgram>(
 			"#version 430 core\nin vec3 Position;in vec2 UV;out vec2 i;void main(){gl_Position=vec4(Position,1);i=UV;}",
 			"#version 430 core\nin vec2 i;uniform sampler2D t;out vec4 v;void main(){v=texture(t,i);}"
 		);
-		m_blitShader.uniform(m_blitShader.uniformId("t"), 0);
-		m_blitShader.setDepthTestMode(DepthTestMode::Off);
-		m_blitShader.setBlendMode(BlendMode::Off);
+		m_blitShader->uniform(m_blitShader->uniformId("t"), 0);
+		m_blitShader->setDepthTestMode(DepthTestMode::Off);
+		m_blitShader->setBlendMode(BlendMode::Off);
 
 		m_contents->bind(0);
-		m_blitShader.bind();
-		m_blitQuad.bind();
+		m_blitShader->bind();
+		m_blitQuad->bind();
 
 		glfwMakeContextCurrent((GLFWwindow*)luna::getGraphicsContext());
 
@@ -94,6 +95,11 @@ namespace luna {
 
 	Window::~Window() {
 		if (m_windowHandle) {
+			glfwMakeContextCurrent(m_windowHandle);
+			m_blitQuad.reset();
+			m_blitShader.reset();
+			glfwMakeContextCurrent((GLFWwindow*)luna::getGraphicsContext());
+
 			glfwDestroyWindow(m_windowHandle);
 			log("Window closed", MessageSeverity::Info);
 		}
@@ -107,7 +113,7 @@ namespace luna {
 		glfwMakeContextCurrent(m_windowHandle);
 
 		glViewport(0, 0, getWidth(), getHeight());
-		glDrawElements(GL_TRIANGLES, GLsizei(m_blitQuad.vertexCount()), GL_UNSIGNED_INT, nullptr);
+		glDrawElements(GL_TRIANGLES, GLsizei(m_blitQuad->vertexCount()), GL_UNSIGNED_INT, nullptr);
 
 		m_imguiContext.update(this);
 
