@@ -314,6 +314,7 @@ namespace luna {
 
 	void blit(const Texture* source, RenderTarget* target) {
 		target->makeActiveTarget();
+		RenderTarget::clear(Color::Clear);
 		blitShader->bind();
 		blitQuad->bind();
 		source->bind(0);
@@ -322,6 +323,7 @@ namespace luna {
 
 	void blit(const Texture* source, RenderTarget* target, const Material* material) {
 		target->makeActiveTarget();
+		RenderTarget::clear(Color::Clear);
 		material->bind();
 		blitQuad->bind();
 		source->bind(0);
