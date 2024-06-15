@@ -8,7 +8,7 @@ namespace luna {
 
 	class Mesh {
 	public:
-		Mesh();
+		Mesh() = default;
 		Mesh(std::initializer_list<Vertex> vertices);
 		Mesh(const Vertex* vertices, size_t size);
 		Mesh(const Vertex* vertices, size_t vertexCount, const unsigned int* indices, size_t indexCount);
@@ -28,17 +28,22 @@ namespace luna {
 		static Mesh loadFromFile(const char* filepath);
 
 	private:
+		void init();
+
+		static Mesh loadObj(const char* filepath);
+
+	private:
 		enum BufferIndex {
 			Vertices = 0,
 			Indices = 1
 		};
 
-		unsigned int m_vao;
-		unsigned int m_vbos[2];
+		unsigned int m_vao = 0;
+		unsigned int m_vbos[2] = {0,0};
 
-		size_t m_vertexCount;
-
-		void init();
+		size_t m_vertexCount = 0;
+		size_t m_vertexBufferSize = 0;
+		size_t m_indexBufferSize = 0;
 	};
 
 }
