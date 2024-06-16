@@ -206,8 +206,8 @@ namespace luna {
 
 		if (m_texture != 0) {
 			bind();
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_minFilter == TextureFilter::Nearest ? GL_NEAREST : GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_magFilter == TextureFilter::Nearest ? GL_NEAREST : GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_minFilter == TextureFilter::Nearest ? (m_hasMipmap ? GL_NEAREST_MIPMAP_LINEAR : GL_NEAREST) : (m_hasMipmap ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR));
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_magFilter == TextureFilter::Nearest ? (m_hasMipmap ? GL_NEAREST_MIPMAP_LINEAR : GL_NEAREST) : (m_hasMipmap ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR));
 		}
 	}
 
@@ -216,7 +216,7 @@ namespace luna {
 		
 		if (m_texture != 0) {
 			bind();
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_minFilter == TextureFilter::Nearest ? GL_NEAREST : GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_minFilter == TextureFilter::Nearest ? (m_hasMipmap ? GL_NEAREST_MIPMAP_LINEAR : GL_NEAREST) : (m_hasMipmap ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR));
 		}
 	}
 
@@ -225,7 +225,7 @@ namespace luna {
 
 		if (m_texture != 0) {
 			bind();
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_magFilter == TextureFilter::Nearest ? GL_NEAREST : GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_magFilter == TextureFilter::Nearest ? (m_hasMipmap ? GL_NEAREST_MIPMAP_LINEAR : GL_NEAREST) : (m_hasMipmap ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR));
 		}
 	}
 
@@ -272,6 +272,30 @@ namespace luna {
 
 	TextureWrapMode Texture::getVerticalWrapMode() const {
 		return m_verticalWrap;
+	}
+
+	void Texture::generateMipmap() {
+		if (m_texture == 0) {
+			log("cannot generate mipmap of an empty texture", luna::MessageSeverity::Error);
+			return;
+		}
+
+		bind();
+		
+		glGenerateMipmap(GL_TEXTURE_2D);
+		m_hasMipmap = true;
+
+		setMinFilter(m_minFilter);
+		setMagFilter(m_magFilter);
+
+	}
+
+	void Texture::enableAnisotropicFiltering(float anisotropy) {
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisotropy);
+	}
+
+	void Texture::disableAnisotropicFiltering() {
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 0.0f);
 	}
 
 	int Texture::getWidth() const {

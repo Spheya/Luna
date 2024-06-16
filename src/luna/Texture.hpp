@@ -66,6 +66,10 @@ namespace luna {
 		TextureWrapMode getHorizontalWrapMode() const;
 		TextureWrapMode getVerticalWrapMode() const;
 
+		void generateMipmap();
+		void enableAnisotropicFiltering(float anisotropy);
+		void disableAnisotropicFiltering();
+
 		int getWidth() const;
 		int getHeight() const;
 		glm::ivec2 getSize() const;
@@ -97,6 +101,8 @@ namespace luna {
 		TextureWrapMode m_horizontalWrap = TextureWrapMode::Clamp;
 		TextureWrapMode m_verticalWrap = TextureWrapMode::Clamp;
 		TextureType m_textureType = TextureType::Solid;
+
+		bool m_hasMipmap = false;
 	};
 
 }
