@@ -33,8 +33,8 @@ namespace luna {
 				const ShaderProgram& shader = it->material->getShader()->getProgram();
 
 				if (shader.getRenderQueue() != batchShader.getRenderQueue() ||
-					(batchShader.getRenderQueue() != RenderQueue::Transparent && &batchMaterial != &material) ||
-					it->mesh != currentBatch.start->mesh
+					(batchShader.getRenderQueue() != RenderQueue::Transparent && (&batchMaterial != &material ||
+					it->mesh != currentBatch.start->mesh))
 				) {
 					m_renderBatches.push_back(currentBatch);
 					currentBatch = RenderBatch(it);
@@ -57,7 +57,6 @@ namespace luna {
 	void ForwardRenderer::render(const Camera& camera) {
 		if (camera.getTarget()) {
 			camera.getTarget()->makeActiveTarget();
-			RenderTarget::clear(camera.getBackgroundColor());
 			luna::uploadCameraMatrices(camera.projection(), camera.getTransform().inverseMatrix());
 
 			// Cache distance to camera
@@ -106,14 +105,14 @@ namespace luna {
 		}
 	}
 
-	bool ForwardRenderer::RenderBatch::operator<(const RenderBatch& other) {
+	bool ForwardRenderer::RenderBatch::operator<(const RenderBatch& other) const {
 		const ShaderProgram& aShader = start->material->getShader()->getProgram();
 		const ShaderProgram& bShader = other.start->material->getShader()->getProgram();
 		if (aShader.getRenderQueue() != bShader.getRenderQueue()) return aShader.getRenderQueue() < bShader.getRenderQueue();
 		return distToCameraSq > other.distToCameraSq;
 	}
 
-	bool ForwardRenderer::RenderObject::operator<(const RenderObject& other) {
+	bool ForwardRenderer::RenderObject::operator<(const RenderObject& other) const {
 		if (material->getShader()->getProgram().getRenderQueue() == RenderQueue::Transparent) return distToCameraSq < other.distToCameraSq;
 		return distToCameraSq > other.distToCameraSq;
 	}

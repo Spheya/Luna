@@ -20,7 +20,7 @@ namespace luna {
 			const Material* material;
 			float distToCameraSq;
 
-			bool operator<(const RenderObject& other);
+			bool operator<(const RenderObject& other) const;
 		};
 
 		struct RenderBatch {
@@ -30,7 +30,7 @@ namespace luna {
 			size_t size;
 			float distToCameraSq;
 
-			bool operator<(const RenderBatch& other);
+			bool operator<(const RenderBatch& other) const;
 		};
 
 		std::vector<RenderBatch> m_renderBatches;

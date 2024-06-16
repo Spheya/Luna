@@ -14,15 +14,6 @@ namespace luna {
 		return m_target;
 	}
 
-
-	void Camera::setBackgroundColor(Color color) {
-		m_backgroundColor = color;
-	}
-
-	Color Camera::getBackgroundColor() const {
-		return m_backgroundColor;
-	}
-
 	void Camera::setTransform(const Transform& transform) {
 		m_transform = transform;
 	}

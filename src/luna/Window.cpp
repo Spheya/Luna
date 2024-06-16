@@ -118,8 +118,10 @@ namespace luna {
 		m_imguiContext.update(this);
 
 		glfwSwapBuffers(m_windowHandle);
-
 		glfwMakeContextCurrent((GLFWwindow*)luna::getGraphicsContext());
+
+		m_contents->makeActiveTarget();
+		RenderTarget::clear(Color::Clear);
 	}
 
 	bool Window::isCloseRequested() const {
