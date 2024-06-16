@@ -185,9 +185,11 @@ namespace luna {
 			defaultShader = std::make_unique<Shader>(vertSrc, fragSrc);
 			defaultTranslucentShader = std::make_unique<Shader>(vertSrc, fragSrc);
 			defaultTranslucentShader->getProgram().setBlendMode(BlendMode::On);
+			defaultTranslucentShader->getProgram().setRenderQueue(RenderQueue::Transparent);
 			defaultUnlitShader = std::make_unique<Shader>(vertUnlitSrc, fragUnlitSrc);
 			defaultUnlitTranslucentShader = std::make_unique<Shader>(vertUnlitSrc, fragUnlitSrc);
 			defaultUnlitTranslucentShader->getProgram().setBlendMode(BlendMode::On);
+			defaultUnlitTranslucentShader->getProgram().setRenderQueue(RenderQueue::Transparent);
 
 			defaultTexture = std::make_unique<Texture>(Color::White);
 			defaultMaterial = std::make_unique<Material>(defaultShader.get());
