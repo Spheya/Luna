@@ -25,9 +25,13 @@ namespace luna {
 		std::unique_ptr<Mesh> blitQuad;
 
 		std::unique_ptr<Shader> defaultShader;
-		std::unique_ptr<Material> defaultMaterial;
 		std::unique_ptr<Shader> defaultUnlitShader;
+		std::unique_ptr<Shader> defaultTranslucentShader;
+		std::unique_ptr<Shader> defaultUnlitTranslucentShader;
+		std::unique_ptr<Material> defaultMaterial;
 		std::unique_ptr<Material> defaultUnlitMaterial;
+		std::unique_ptr<Material> defaultTranslucentMaterial;
+		std::unique_ptr<Material> defaultUnlitTranslucentMaterial;
 		std::unique_ptr<Texture> defaultTexture;
 
 		void loadPrimitives() {
@@ -93,8 +97,7 @@ namespace luna {
 		}
 
 		void loadShaders() {
-			defaultShader = std::make_unique<Shader>(
-				"\
+			const char* vertSrc = "\
 				#version 430 core\n\
 				\n\
 				layout(location = 0) in vec3 Position;\n\
@@ -120,9 +123,9 @@ namespace luna {
 					vertexColor = MainColor * Color;\n\
 					uv = UV * MainTexture_ST.xy + MainTexture_ST.zw;\n\
 					normal = mat3(ModelMatrix) * Normal;\n\
-				}\n",
+				}\n";
 
-				"\
+			const char* fragSrc = "\
 				#version 430 core\n\
 				\n\
 				in vec4 vertexColor;\n\
@@ -137,11 +140,9 @@ namespace luna {
 					fragColor = texture(MainTexture, uv) * vertexColor;\n\
 					fragColor.rgb *= max(dot(normalize(normal), normalize(vec3(0.5, 1.0, -1.0))), 0.1) * 0.8 + (normal.y + 1.0) * 0.1;\n\
 					if(fragColor.a == 0.0) discard;\n\
-				}\n"
-			);
+				}\n";
 
-			defaultUnlitShader = std::make_unique<Shader>(
-				"\
+			const char* vertUnlitSrc = "\
 				#version 430 core\n\
 				\n\
 				layout(location = 0) in vec3 Position;\n\
@@ -164,9 +165,9 @@ namespace luna {
 					gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(Position, 1.0);\n\
 					vertexColor = MainColor * Color;\n\
 					uv = UV * MainTexture_ST.xy + MainTexture_ST.zw;\n\
-				}\n",
+				}\n";
 
-				"\
+			const char* fragUnlitSrc = "\
 				#version 430 core\n\
 				\n\
 				in vec4 vertexColor;\n\
@@ -179,13 +180,24 @@ namespace luna {
 				void main() {\n\
 					fragColor = texture(MainTexture, uv) * vertexColor;\n\
 					if(fragColor.a == 0.0) discard;\n\
-				}\n"
-			);
+				}\n";
+
+			defaultShader = std::make_unique<Shader>(vertSrc, fragSrc);
+			defaultTranslucentShader = std::make_unique<Shader>(vertSrc, fragSrc);
+			defaultTranslucentShader->getProgram().setBlendMode(BlendMode::On);
+			defaultUnlitShader = std::make_unique<Shader>(vertUnlitSrc, fragUnlitSrc);
+			defaultUnlitTranslucentShader = std::make_unique<Shader>(vertUnlitSrc, fragUnlitSrc);
+			defaultUnlitTranslucentShader->getProgram().setBlendMode(BlendMode::On);
+
 			defaultTexture = std::make_unique<Texture>(Color::White);
-			defaultUnlitMaterial = std::make_unique<Material>(defaultUnlitShader.get());
-			defaultUnlitMaterial->setMainTexture(defaultTexture.get());
 			defaultMaterial = std::make_unique<Material>(defaultShader.get());
 			defaultMaterial->setMainTexture(defaultTexture.get());
+			defaultTranslucentMaterial = std::make_unique<Material>(defaultTranslucentShader.get());
+			defaultTranslucentMaterial->setMainTexture(defaultTexture.get());
+			defaultUnlitMaterial = std::make_unique<Material>(defaultUnlitShader.get());
+			defaultUnlitMaterial->setMainTexture(defaultTexture.get());
+			defaultUnlitTranslucentMaterial = std::make_unique<Material>(defaultUnlitTranslucentShader.get());
+			defaultUnlitTranslucentMaterial->setMainTexture(defaultTexture.get());
 
 			blitShader = std::make_unique<ShaderProgram>(
 				"#version 430 core\nin vec3 Position;in vec2 UV;out vec2 i;void main(){gl_Position=vec4(Position,1);i=UV;}",
@@ -247,14 +259,22 @@ namespace luna {
 
 	void terminate() {
 		for (int i = 0; i < sizeof(primitives) / sizeof(*primitives); i++)
-			primitives[i].release();
-		defaultShader.release();
-		defaultUnlitShader.release();
-		defaultTexture.release();
-		defaultMaterial.release();
-		defaultUnlitMaterial.release();
-		blitShader.release();
-		cameraMatricesBlock.release();
+			primitives[i].reset();
+
+		defaultShader.reset();
+		defaultTranslucentShader.reset();
+		defaultUnlitShader.reset();
+		defaultUnlitTranslucentShader.reset();
+		blitShader.reset();
+
+		defaultMaterial.reset();
+		defaultTranslucentMaterial.reset();
+		defaultUnlitMaterial.reset();
+		defaultUnlitTranslucentMaterial.reset();
+
+		defaultTexture.reset();
+
+		cameraMatricesBlock.reset();
 		log("Unloaded default assets", MessageSeverity::Info);
 
 		glfwTerminate();
@@ -300,16 +320,32 @@ namespace luna {
 		return defaultShader.get();
 	}
 
-	const Material* getDefaultMaterial() {
-		return defaultMaterial.get();
-	}
-
 	const Shader* getDefaultUnlitShader() {
 		return defaultUnlitShader.get();
 	}
 
+	const Shader* getDefaultTranslucentShader() {
+		return defaultTranslucentShader.get();
+	}
+
+	const Shader* getDefaultUnlitTranslucentShader() {
+		return defaultUnlitTranslucentShader.get();
+	}
+
+	const Material* getDefaultMaterial() {
+		return defaultMaterial.get();
+	}
+
 	const Material* getDefaultUnlitMaterial() {
 		return defaultUnlitMaterial.get();
+	}
+
+	const Material* getDefaultTranslucentMaterial() {
+		return defaultTranslucentMaterial.get();
+	}
+
+	const Material* getDefaultUnlitTranslucentMaterial() {
+		return defaultUnlitTranslucentMaterial.get();
 	}
 
 	void blit(const Texture* source, RenderTarget* target) {

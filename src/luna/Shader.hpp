@@ -8,8 +8,6 @@ namespace luna {
 	public:
 		Shader() = default;
 		Shader(const char* vertexSource, const char* fragmentSource);
-		Shader(Shader&) = delete;
-		Shader& operator=(Shader&) = delete;
 
 		void load(const char* vertexSource, const char* fragmentSource);
 

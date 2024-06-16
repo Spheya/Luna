@@ -26,9 +26,13 @@ namespace luna {
 
 	const Mesh* getPrimitive(Primitive primitive);
 	const Shader* getDefaultShader();
-	const Material* getDefaultMaterial();
 	const Shader* getDefaultUnlitShader();
+	const Shader* getDefaultTranslucentShader();
+	const Shader* getDefaultUnlitTranslucentShader();
+	const Material* getDefaultMaterial();
 	const Material* getDefaultUnlitMaterial();
+	const Material* getDefaultTranslucentMaterial();
+	const Material* getDefaultUnlitTranslucentMaterial();
 
 	void blit(const Texture* source, RenderTarget* target);
 	void blit(const Texture* source, RenderTarget* target, const Material* material);
