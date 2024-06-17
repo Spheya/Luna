@@ -65,7 +65,7 @@ namespace luna {
 			}
 
 			for (auto& batch : m_renderBatches) {
-				batch.distToCameraSq = 1e32;
+				batch.distToCameraSq = 1e32f;
 				for (auto it = batch.start; it != batch.start + batch.size; ++it)
 					batch.distToCameraSq = std::min(it->distToCameraSq, batch.distToCameraSq);
 			}

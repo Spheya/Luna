@@ -15,6 +15,8 @@ namespace luna {
 		void setShader(const Shader* shader);
 		const Shader* getShader() const;
 
+		size_t getTextureCount() const;
+
 		void bind() const;
 
 		void setMainColor(Color value);

@@ -94,6 +94,7 @@ namespace luna {
 	void Texture::setTextureDataInternal(void* data, int width, int height, int format, int type) {
 		GLenum internalFormat = GL_RGBA8;
 		switch (m_format) {
+			case TextureFormat::Value: internalFormat = GL_R8; break;
 			case TextureFormat::Rgb: internalFormat = GL_RGB8; break;
 			case TextureFormat::Rgba: internalFormat = GL_RGBA8; break;
 			case TextureFormat::Float: internalFormat = GL_R16F; break;
@@ -148,7 +149,14 @@ namespace luna {
 			}
 		}
 
-		setTextureDataInternal((void*)data, width, height, GL_RGBA, GL_UNSIGNED_BYTE);
+		int format = GL_RGBA;
+		switch (m_format) {
+			case TextureFormat::Value: format = GL_R; break;
+			case TextureFormat::Rgb: format = GL_RGB; break;
+			case TextureFormat::Rgba: format = GL_RGBA; break;
+			case TextureFormat::Float: format = GL_R; break;
+		}
+		setTextureDataInternal((void*)data, width, height, format, GL_UNSIGNED_BYTE);
 	}
 
 	void Texture::setTextureData(const std::uint8_t* data, glm::ivec2 size) {
@@ -198,6 +206,10 @@ namespace luna {
 
 	TextureType Texture::getTextureType() const {
 		return m_textureType;
+	}
+
+	TextureFormat Texture::getFormat() const {
+		return m_format;
 	}
 
 	void Texture::setFilter(TextureFilter filter) {

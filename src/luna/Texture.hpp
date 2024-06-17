@@ -5,7 +5,7 @@
 
 namespace luna {
 	enum class TextureFormat {
-		Rgb, Rgba, Float, FloatRgba
+		Value, Rgb, Rgba, Float, FloatRgba
 	};
 
 	enum class TextureFilter {
@@ -53,6 +53,8 @@ namespace luna {
 		void setTextureData(const Color* data, glm::ivec2 size);
 
 		TextureType getTextureType() const;
+
+		TextureFormat getFormat() const;
 
 		void setFilter(TextureFilter filter);
 		void setMinFilter(TextureFilter filter);

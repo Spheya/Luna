@@ -22,6 +22,10 @@ namespace luna {
 		return m_shader;
 	}
 
+	size_t Material::getTextureCount() const {
+		return m_textureParams.size();
+	}
+
 	void Material::bind() const {
 		const ShaderProgram* program = &m_shader->getProgram();
 		program->bind();
