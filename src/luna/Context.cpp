@@ -206,6 +206,8 @@ namespace luna {
 				"#version 430 core\nin vec2 i;uniform sampler2D t;out vec4 v;void main(){v=texture(t,i);}"
 			);
 			blitShader->uniform(blitShader->uniformId("t"), 0);
+			blitShader->setDepthTestMode(DepthTestMode::Off);
+			blitShader->setBlendMode(BlendMode::Off);
 		}
 		
 		void loadUniformBlocks() {
@@ -352,7 +354,6 @@ namespace luna {
 
 	void blit(const Texture* source, RenderTarget* target) {
 		target->makeActiveTarget();
-		RenderTarget::clear(Color::Clear);
 		blitShader->bind();
 		blitQuad->bind();
 		source->bind(0);
@@ -361,7 +362,6 @@ namespace luna {
 
 	void blit(const Texture* source, RenderTarget* target, const Material* material) {
 		target->makeActiveTarget();
-		RenderTarget::clear(Color::Clear);
 		material->bind();
 		blitQuad->bind();
 		source->bind(0);
