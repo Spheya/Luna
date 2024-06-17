@@ -83,6 +83,7 @@ namespace luna {
 		if (m_vao == 0)
 			init();
 
+		glBindVertexArray(m_vao);
 		glBindBuffer(GL_ARRAY_BUFFER, m_vbos[Vertices]);
 
 		if (m_vertexBufferSize < size) {
@@ -98,6 +99,7 @@ namespace luna {
 			init();
 
 		m_vertexCount = size;
+		glBindVertexArray(m_vao);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vbos[Indices]);
 
 		if (m_indexBufferSize < size) {
