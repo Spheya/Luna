@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <cmath>
+#include <algorithm>
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
@@ -9,8 +10,6 @@
 #include <glm/gtx/quaternion.hpp>
 
 namespace luna {
-	using namespace glm;
-
 	constexpr float Pi          = 3.14159265359f;
 	constexpr float Tau         = 6.28318530718f;
 	constexpr float E           = 2.71828182845f;

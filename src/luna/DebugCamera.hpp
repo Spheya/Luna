@@ -17,7 +17,7 @@ namespace luna {
 
 		camera.getTransform().position += movement * getDeltaTime();
 		camera.getTransform().rotation += glm::vec3(Input::getMouseDelta().y * sensitivity * (Pi / 180.0), Input::getMouseDelta().x * sensitivity * (Pi / 180.0f), 0.0f);
-		camera.getTransform().rotation.x = clamp(camera.getTransform().rotation.x, Tau * -0.25f, Tau * +0.25f);
+		camera.getTransform().rotation.x = std::clamp(camera.getTransform().rotation.x, Tau * -0.25f, Tau * +0.25f);
 	}
 
 }
