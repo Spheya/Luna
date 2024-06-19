@@ -21,6 +21,9 @@ namespace luna {
 		T* operator->() { return m_value; }
 		const T* operator->() const { return m_value; }
 
+		T* get() { return m_value; };
+		const T* get() const { return m_value; }
+
 	private:
 		T* m_value;
 	};

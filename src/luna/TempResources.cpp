@@ -45,7 +45,7 @@ namespace luna {
 		for (auto& tmpRenderTexture : tempRenderTextures) {
 			if (tmpRenderTexture.resource.get() == texture) {
 #ifdef _DEBUG
-				if(!tmpRenderTexture.available)
+				if (tmpRenderTexture.available)
 					log("A TempRenderTexture got released twice! Remember that they get released automatically in their destructor", MessageSeverity::Warning);
 #endif
 
@@ -63,6 +63,7 @@ namespace luna {
 		for (auto& tmpRenderTexture : tempRenderTextures) {
 			auto* resource = tmpRenderTexture.resource.get();
 			if (tmpRenderTexture.available && resource->getSize() == size && resource->getFormat() == format) {
+				tmpRenderTexture.available = false;
 				resource->makeActiveTarget();
 				RenderTarget::clear(Color::Clear);
 				return TempRenderTexture(resource);

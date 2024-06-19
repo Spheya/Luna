@@ -17,6 +17,8 @@ namespace luna {
 	constexpr float Sqrt2       = 1.41421356237f;
 	constexpr float Sqrt3       = 1.73205080757f;
 	constexpr float Sqrt5       = 2.23606797749f;
+	constexpr float RadToDeg    = 57.2957795131f;
+	constexpr float DegToRad    = 0.01745329251f;
 
 	struct Transform {
 		explicit Transform(glm::vec3 position = glm::vec3(0.0f), glm::vec3 rotation = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f)) :
