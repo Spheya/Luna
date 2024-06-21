@@ -7,8 +7,6 @@ if (POLICY CMP0141)
 endif()
 
 project ("luna")
-option(LUNA_BUILD_EXAMPLE "Build the Luna example program" ON)
-option(LUNA_BUILD_SANDBOX "Build the Luna sandbox program" ON)
 option(LUNA_ENABLE_IMGUI "Enable ImGui" ON)
 
 add_subdirectory ("external")
@@ -24,10 +22,10 @@ install(TARGETS luna DESTINATION lib)
 install(FILES LICENSE DESTINATION .)
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/ DESTINATION include FILES_MATCHING PATTERN "*.hpp")
 
-if(LUNA_BUILD_EXAMPLE)
+if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
 	add_subdirectory ("example")
 endif()
 
-if(LUNA_BUILD_SANDBOX)
+if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
 	add_subdirectory ("sandbox")
 endif()
