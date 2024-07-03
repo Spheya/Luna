@@ -370,6 +370,14 @@ namespace luna {
 		return result;
 	}
 
+	std::vector<Color> Texture::getTextureData() {
+		bind();
+		std::vector<Color> result;
+		result.resize(m_dimensions.x * m_dimensions.y);
+		glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_FLOAT, result.data());
+		return result;
+	}
+
 	unsigned int Texture::getInternalHandle() const {
 		return m_texture;
 	}

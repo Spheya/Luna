@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include "Math.hpp"
 #include "Color.hpp"
 
@@ -79,6 +81,8 @@ namespace luna {
 		void setSize(glm::ivec2 size);
 
 		void bind(int textureSlot) const;
+
+		std::vector<Color> getTextureData();
 
 		unsigned int getInternalHandle() const;
 

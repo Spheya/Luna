@@ -16,7 +16,7 @@ namespace luna {
 		static Color Gray;
 		static Color White;
 
-		constexpr Color();
+		constexpr Color() = default;
 		constexpr Color(float r, float g, float b, float a = 1.0f);
 		constexpr Color(int r, int g, int b, int a = 255);
 		GLM_CONSTEXPR Color(glm::vec4 color) : Color(color.r, color.g, color.b, color.a) {}
@@ -29,7 +29,7 @@ namespace luna {
 
 		uint32_t compressed() const;
 
-		float r, g, b, a;
+		float r = 0.0f, g = 0.0f, b = 0.0f, a = 0.0f;
 	};
 
 }

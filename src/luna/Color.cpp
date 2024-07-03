@@ -15,8 +15,6 @@ namespace luna {
 	Color Color::Gray(0.5f, 0.5f, 0.5f);
 	Color Color::White(1.0f, 1.0f, 1.0f);
 
-	constexpr Color::Color() : Color(0.0f, 0.0f, 0.0f, 0.0f) {}
-
 	constexpr Color::Color(float r, float g, float b, float a) :
 		r(r), g(g), b(b), a(a)
 	{}
