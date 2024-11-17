@@ -19,9 +19,9 @@ int main() {
 
 		luna::ForwardRenderer renderer;
 
-		luna::Texture texture = luna::Texture::fromFile("assets/jaccobox.png");
+		luna::Texture texture = luna::Texture(glm::vec4(1.0f, 0.0f, 1.0f, 1.0f));
+		texture.setFilter(luna::TextureFilter::Nearest);
 		texture.generateMipmap();
-		luna::Texture texture2(glm::vec4(1.0f, 0.0f, 1.0f, 1.0f));
 
 		luna::Shader shader(
 			16,
@@ -37,35 +37,16 @@ int main() {
 		mat.setMaterialBlockData(&col);
 		mat.setSampler("_MainTexture", &texture);
 
-		luna::Material mat2(&shader);
-		glm::vec4 col2(1.0f, 0.0f, 1.0f, 1.0f);
-		mat2.setMaterialBlockData(&col2);
-		mat2.setSampler("_MainTexture", &texture2);
-
-		luna::Material mat3(&shader);
-		mat3.setMaterialBlockData(&col);
-		mat3.setSampler("_MainTexture", renderer.m_shadowMap.depthBuffer());
-
-		luna::Transform transform(glm::vec3(0.0f, 0.0f, -2.0f));
-		luna::Transform transform1(glm::vec3(+0.8f, 0.0f, -5.0f));
-		luna::Transform transform2(glm::vec3(-0.8f, 0.0f, -5.0f));
-		luna::Transform transform3(glm::vec3(0.0f, -2.0f, -5.0f), glm::vec3(0.0f), glm::vec3(10.0f, 1.0f, 10.0f));
+		luna::Transform transform(glm::vec3(0.0f, 0.0f, -5.0f));
 
 		while (!window.isCloseRequested()) {
 			luna::update();
 			camera.updateAspect();
 
-			transform1.rotation += luna::deltatime();
-			transform2.rotation += luna::deltatime();
-
-			renderer.submit(&luna::getPrimitive(luna::Primitive::Teapot), &mat2, transform1.matrix());
-			//renderer.submit(&luna::getPrimitive(luna::Primitive::Cube), &mat, transform2.matrix());
-			//renderer.submit(&luna::getPrimitive(luna::Primitive::Cube), &mat, transform3.matrix());
-			//renderer.submit(&luna::getPrimitive(luna::Primitive::Quad), &mat3, transform.matrix());
-			//renderer.submit(luna::DirectionalLight(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f) * 0.7f, glm::normalize(glm::vec3(1.0f, -2.0f, -1.0f))));
+			transform.rotation += luna::deltatime();
+			renderer.submit(&luna::getPrimitive(luna::Primitive::Cube), &mat, transform.matrix());
 
 			renderer.render(camera);
-
 			renderer.clear();
 			window.update();
 		}

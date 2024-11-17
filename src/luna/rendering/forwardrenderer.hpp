@@ -16,21 +16,8 @@ namespace luna {
 		void clear();
 
 	private:
-		struct LunaForwardData {
-			glm::vec4 lightSources[32];
-			int lightSourceCount;
-		};
-		LunaForwardData m_lunaForwardData;
-		DirectionalLight m_mainLight;
-		bool m_hasMainLight;
-
 		std::vector<Drawable> m_drawables;
-		Buffer m_renderTypeBuffer;
-
 		RenderType m_lunaForwardRenderType;
-
-	public:
-		RenderTexture m_shadowMap;
 	};
 
 }

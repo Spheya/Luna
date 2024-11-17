@@ -4,9 +4,12 @@
 namespace luna {
 	ForwardRenderer::ForwardRenderer() :
 		Renderer(),
-		m_lunaForwardRenderType(getRenderTypeId("LunaForward")),
-		m_renderTypeBuffer(BufferType::UniformBuffer, BufferAccess::Write, BufferUsage::Dynamic)
+		m_lunaForwardRenderType(getRenderTypeId("LunaForward"))
 	{}
+
+	void ForwardRenderer::submit(const Mesh* mesh, const Material* material, const glm::mat4& matrix) {
+		m_drawables.emplace_back(mesh, material, matrix);
+	}
 
 	void ForwardRenderer::render(const Camera& camera, bool clear) {
 		if (!camera.renderTarget())
