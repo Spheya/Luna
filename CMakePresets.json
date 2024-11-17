@@ -1,0 +1,134 @@
+﻿{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "luna-base",
+      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "installDir": "${sourceDir}/out/install/${presetName}"
+    },
+
+
+    {
+      "name": "vulkan",
+      "hidden": true,
+      "inherits": "luna-base",
+      "cacheVariables": {
+        "LUNA_BACKEND": "vulkan"
+      }
+    },
+    {
+      "name": "opengl",
+      "hidden": true,
+      "inherits": "luna-base",
+      "cacheVariables": {
+        "LUNA_BACKEND": "opengl"
+      }
+    },
+
+
+    {
+      "name": "windows-base",
+      "hidden": true,
+      "inherits": "luna-base",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+
+
+    {
+      "name": "Win64-Vulkan-Debug",
+      "displayName": "Win64 Vulkan Debug",
+      "inherits": [ "windows-base", "vulkan" ],
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "Win64-Vulkan-Release",
+      "displayName": "Win64 Vulkan Release",
+      "inherits": [ "windows-base", "vulkan" ],
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "Win32-Vulkan-Debug",
+      "displayName": "Win32 Vulkan Debug",
+      "inherits": [ "windows-base", "vulkan" ],
+      "architecture": {
+        "value": "x86",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "Win32-Vulkan-Release",
+      "displayName": "Win32 Vulkan Release",
+      "inherits": [ "windows-base", "vulkan" ],
+      "architecture": {
+        "value": "x86",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+
+
+    {
+      "name": "Win64-OpenGL-Debug",
+      "displayName": "Win64 OpenGL Debug",
+      "inherits": [ "windows-base", "opengl" ],
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "Win64-OpenGL-Release",
+      "displayName": "Win64 OpenGL Release",
+      "inherits": [ "windows-base", "opengl" ],
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "Win32-OpenGL-Debug",
+      "displayName": "Win32 OpenGL Debug",
+      "inherits": [ "windows-base", "opengl" ],
+      "architecture": {
+        "value": "x86",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "Win32-OpenGL-Release",
+      "displayName": "Win32 OpenGL Release",
+      "inherits": [ "windows-base", "opengl" ],
+      "architecture": {
+        "value": "x86",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    }
+  ]
+}
